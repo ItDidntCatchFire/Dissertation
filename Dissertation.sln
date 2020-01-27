@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{F9077BC6-5573-4F30-9441-E859FF37DF10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{64247586-00DB-4F0A-B64C-CE12819073B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{64247586-00DB-4F0A-B64C-CE12819073B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{DA2039F6-D528-4522-A50B-586606860682}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLogic", "DataLogic\DataLogic.csproj", "{3410522B-F115-4F18-8A75-2279EFC3848E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,14 @@ Global
 		{64247586-00DB-4F0A-B64C-CE12819073B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64247586-00DB-4F0A-B64C-CE12819073B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64247586-00DB-4F0A-B64C-CE12819073B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA2039F6-D528-4522-A50B-586606860682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA2039F6-D528-4522-A50B-586606860682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA2039F6-D528-4522-A50B-586606860682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA2039F6-D528-4522-A50B-586606860682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3410522B-F115-4F18-8A75-2279EFC3848E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3410522B-F115-4F18-8A75-2279EFC3848E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3410522B-F115-4F18-8A75-2279EFC3848E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3410522B-F115-4F18-8A75-2279EFC3848E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
