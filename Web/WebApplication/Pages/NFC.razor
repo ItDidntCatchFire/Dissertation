@@ -2,58 +2,64 @@
 @inject IJSRuntime JSRuntime;
 <h1>NFC</h1>
 
-<button type="button" class="btn btn-primary" @onclick="ConvertArray">
-    Convert Array
-</button>
-
 <p class="mt-2" style="font-size:1.6em">
     <span class="badge badge-success">
         @_convertedText
     </span>
 </p>
 
-<button type="button" class="btn btn-primary" @onclick="Nfc">
+<button type="button" class="btn btn-primary" onclick="NFCScan()">
     Scan
 </button>
-<div>
-<div>
-Test
-</div>
-<div>
-Test
-</div>
-<div>
-Test
-</div>
+<div class="container" id="List">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 1</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 2</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 3</h3>        
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
 </div>
 @code {
  // Quote (c)2005 Universal Pictures: Serenity
     // https://www.uphe.com/movies/serenity
     // David Krumholtz on IMDB: https://www.imdb.com/name/nm0472710/
 
-    private MarkupString _convertedText =
+    public static MarkupString _convertedText =
         new MarkupString("Select the <b>Convert Array</b> button.");
-
-    private uint[] _quoteArray = new uint[]
-        {
-            60, 101, 109, 62, 67, 97, 110, 39, 116, 32, 115, 116, 111, 112, 32,
-            116, 104, 101, 32, 115, 105, 103, 110, 97, 108, 44, 32, 77, 97,
-            108, 46, 60, 47, 101, 109, 62, 32, 45, 32, 77, 114, 46, 32, 85, 110,
-            105, 118, 101, 114, 115, 101, 10, 10,
-        };
-
-    private async Task ConvertArray()
+    
+    private static Action _action;
+    private static string _message = "Select the button.";
+    
+    protected override void OnInitialized()
     {
-        var text =
-            await JSRuntime.InvokeAsync<string>("convertArray", _quoteArray);
-
-        _convertedText = new MarkupString(text);
-
-        StateHasChanged();
+        _action = UpdateMessage;
     }
     
-    private async Task Nfc() {
-          
-         await JSRuntime.InvokeVoidAsync("NFCScan");
+    private void UpdateMessage()
+    {
+       _convertedText = new MarkupString(_message);
+       StateHasChanged();
+    }
+    
+    [JSInvokable]
+    public static void UpdateMessageCaller(string param)
+    {
+        _message = param;
+        _action.Invoke();
     }
 }
