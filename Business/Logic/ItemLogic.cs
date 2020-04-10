@@ -1,38 +1,58 @@
-﻿using DataLogic;
-using System.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Business.Logic {
-	public static class ItemLogic {
+namespace Business.Logic
+{
+    public class ItemLogic : ILogic<Models.Item, Guid>
+    {
+        private readonly Repository.IItemRepository _itemRepository;
 
-		public static async Task<Models.Item> GetItemByItemIdAsync(int itemId) {
-			using (SqlConnection c = new SqlConnection(DataFactory.DBConnectionString)) {
-				c.Open();
-				var item = await ItemDL.GetItemByItemId(c, itemId).ConfigureAwait(false);
-				c.Close();
+        public ItemLogic(Repository.IItemRepository itemRepository)
+        {
+            _itemRepository = itemRepository;
+        }
 
-				return new Models.Item() {
-					ItemId = item.ItemId,
-					Name = item.Name,
-					Description = item.Description
-				};
-			}
-		}
+        public Task<IEnumerable<Models.Item>> ListAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-		public static async Task<int> InsertItemAsync(Models.Item item) {
-			using (SqlConnection c = new SqlConnection(DataFactory.DBConnectionString)) {
-				c.Open();
+        public async Task<Models.Item> GetByIdAsync(Guid itemId)
+        {
+            var item = await _itemRepository.GetByIdAsync(itemId);
 
-				ItemDL itemDL = new ItemDL() {
-					ItemId = item.ItemId,
-					Name = item.Name,
-					Description = item.Description
-				};
+            return new Models.Item()
+            {
+                ItemId = item.ItemId,
+                Name = item.Name,
+                Description = item.Description,
+                ShelfLife = item.ShelfLife
+            };
+        }
 
-				var retVal = await ItemDL.InsertItem(c, itemDL);
-				c.Close();
-				return retVal;
-			}
-		}
-	}
+        public async Task<Guid> InsertAsync(Models.Item type)
+        {
+            var itemDL = new DataLogic.Models.ItemDL()
+            {
+                ItemId = type.ItemId,
+                Name = type.Name,
+                Description = type.Description,
+                ShelfLife = type.ShelfLife
+            };
+
+            var retVal = await _itemRepository.InsertAsync(itemDL);
+            return retVal;
+        }
+
+        public Task DeleteAsync(Models.Item type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Models.Item type)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
