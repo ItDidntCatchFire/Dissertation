@@ -10,9 +10,6 @@ window.NFCScan = async () => {
         });
 
         reader.addEventListener("reading", ({ message, serialNumber }) => {
-            //console.log(`> Serial Number: ${serialNumber}`);
-            //console.log(`> Records: (${message.records.length})`);
-
             DotNet.invokeMethod('WebApplication', 'UpdateMessageCaller', "Serial Number: " + serialNumber);
         });
     } catch (error) {

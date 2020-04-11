@@ -8,37 +8,26 @@
     </span>
 </p>
 
-<button type="button" class="btn btn-primary" onclick="NFCScan()">
-    Scan
+<button type="button" class="btn btn-primary" @onclick="DoAThing">
+    Do A Thing
 </button>
-<div class="container" id="List">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Column 3</h3>        
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
-  </div>
-</div>
-@code {
- // Quote (c)2005 Universal Pictures: Serenity
-    // https://www.uphe.com/movies/serenity
-    // David Krumholtz on IMDB: https://www.imdb.com/name/nm0472710/
 
+@if (NfcData == new List<string>())
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    var temp = "";
+    @foreach (var str in NfcData)
+    {
+        temp += str + "<br>";
+    }
+    <p><em>@temp</em></p>
+}
+
+
+@code {
     public static MarkupString _convertedText =
         new MarkupString("Select the <b>Convert Array</b> button.");
     
@@ -48,17 +37,31 @@
     protected override void OnInitialized()
     {
         _action = UpdateMessage;
+        JSRuntime.InvokeVoidAsync("NFCScan");
+        
+        StateHasChanged();
+    }
+
+    private static List<string> NfcData = new List<string>();
+
+    private void DoAThing()
+    {
+        _convertedText = new MarkupString("DoAThing");
+        
+        
+        StateHasChanged();
     }
     
     private void UpdateMessage()
     {
-       _convertedText = new MarkupString(_message);
+        _convertedText = new MarkupString(_message);
        StateHasChanged();
     }
     
     [JSInvokable]
     public static void UpdateMessageCaller(string param)
     {
+        NfcData.Add(param);
         _message = param;
         _action.Invoke();
     }
