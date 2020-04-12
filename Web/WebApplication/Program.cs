@@ -14,7 +14,7 @@ namespace WebApplication
         {
             var host = BlazorWebAssemblyHost.CreateDefaultBuilder()
                 .UseBlazorStartup<Startup>();
-
+            
             return host;
         }
     }

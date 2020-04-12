@@ -1,68 +1,81 @@
 ﻿@page "/NFC"
+@using System.Net
+@using Microsoft.Extensions.Logging
+@using Newtonsoft.Json.Linq
 @inject IJSRuntime JSRuntime;
 <h1>NFC</h1>
-
-<p class="mt-2" style="font-size:1.6em">
-    <span class="badge badge-success">
-        @_convertedText
-    </span>
-</p>
-
-<button type="button" class="btn btn-primary" @onclick="DoAThing">
-    Do A Thing
-</button>
-
-@if (NfcData == new List<string>())
+@if (!@permission)
 {
-    <p><em>Loading...</em></p>
+    <button @onclick="NFCPermission">
+        Start Scanning
+    </button>    
+}
+
+
+<h1>@Error</h1>
+@if (Items == new List<Business.Models.Item>())
+{
+    <p><em>Please Scan Something</em></p>
 }
 else
 {
-    var temp = "";
-    @foreach (var str in NfcData)
-    {
-        temp += str + "<br>";
-    }
-    <p><em>@temp</em></p>
+    <div class="list-group overflow-auto" style="height: 60vh">
+        @foreach (var item in Items)
+        {
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="mb-1">@item.Name</p>
+                    <small>@item.SellPrice</small>
+                    <small>Quantity</small>
+                </div>
+                
+            </a>
+        }
+    </div>
 }
 
 
 @code {
-    public static MarkupString _convertedText =
-        new MarkupString("Select the <b>Convert Array</b> button.");
-    
+    private static List<Business.Models.Item> Items = new List<Business.Models.Item>();
     private static Action _action;
-    private static string _message = "Select the button.";
+    private static HttpClient _httpClient;
+    private static string Error;
+    private static bool permission;
     
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        _httpClient = new HttpClient();
         _action = UpdateMessage;
-        JSRuntime.InvokeVoidAsync("NFCScan");
         
+        permission = await JSRuntime.InvokeAsync<bool>("NFCScan");
+
         StateHasChanged();
     }
 
-    private static List<string> NfcData = new List<string>();
 
-    private void DoAThing()
-    {
-        _convertedText = new MarkupString("DoAThing");
-        
-        
-        StateHasChanged();
-    }
-    
     private void UpdateMessage()
     {
-        _convertedText = new MarkupString(_message);
-       StateHasChanged();
+        StateHasChanged();
     }
-    
+
+    private void NFCPermission()
+    {    
+        JSRuntime.InvokeVoidAsync("NFCPermission");
+    }
+
     [JSInvokable]
-    public static void UpdateMessageCaller(string param)
+    public static async void UpdateMessageCaller(string param)
     {
-        NfcData.Add(param);
-        _message = param;
-        _action.Invoke();
+        try
+        {
+            var item = await _httpClient.GetJsonAsync<Business.Models.Item>("https://192.168.0.103:5002/api/Item/0f8fad5b-d9cb-469f-a165-70867728950e");
+            Items.Add(item);
+        
+            _action.Invoke();
+        }
+        catch (Exception ex)
+        {
+            
+        }
     }
 }
