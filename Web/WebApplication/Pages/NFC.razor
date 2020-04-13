@@ -1,34 +1,28 @@
 ﻿@page "/NFC"
-@using System.Net
-@using Microsoft.Extensions.Logging
-@using Newtonsoft.Json.Linq
 @inject IJSRuntime JSRuntime;
-<h1>NFC</h1>
 @if (!@permission)
 {
     <button @onclick="NFCPermission">
         Start Scanning
     </button>    
 }
-
-
-<h1>@Error</h1>
-@if (Items == new List<Business.Models.Item>())
+else if (Items == null)
 {
     <p><em>Please Scan Something</em></p>
 }
 else
 {
+    <p>Total Price @Items.Sum(x => (x.Quantity * x.SellPrice))</p>
     <div class="list-group overflow-auto" style="height: 60vh">
         @foreach (var item in Items)
         {
             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <p class="mb-1">@item.Name</p>
-                    <small>@item.SellPrice</small>
-                    <small>Quantity</small>
+                    <small>Price @item.SellPrice</small>
+                    <small>Quantity @item.Quantity</small>
+                    <small>Total Price @(item.Quantity * item.SellPrice)</small>
                 </div>
-                
             </a>
         }
     </div>
@@ -36,10 +30,9 @@ else
 
 
 @code {
-    private static List<Business.Models.Item> Items = new List<Business.Models.Item>();
+    private static List<Item> Items;
     private static Action _action;
     private static HttpClient _httpClient;
-    private static string Error;
     private static bool permission;
     
     protected override async void OnInitialized()
@@ -47,9 +40,7 @@ else
         _httpClient = new HttpClient();
         _action = UpdateMessage;
         
-        permission = await JSRuntime.InvokeAsync<bool>("NFCScan");
-
-        StateHasChanged();
+        NFCPermission();
     }
 
 
@@ -58,18 +49,44 @@ else
         StateHasChanged();
     }
 
-    private void NFCPermission()
-    {    
-        JSRuntime.InvokeVoidAsync("NFCPermission");
+    private async void NFCPermission()
+    {
+        permission = await JSRuntime.InvokeAsync<bool>("NFCScan");
+
+        StateHasChanged();
     }
 
     [JSInvokable]
-    public static async void UpdateMessageCaller(string param)
+    public static async void UpdateMessageCaller(string data)
     {
         try
         {
-            var item = await _httpClient.GetJsonAsync<Business.Models.Item>("https://192.168.0.103:5002/api/Item/0f8fad5b-d9cb-469f-a165-70867728950e");
-            Items.Add(item);
+            var _item = await _httpClient.GetJsonAsync<Business.Models.Item>("https://192.168.0.103:5002/api/Item/" + data);
+            
+            if (Items == null)
+                Items = new List<Item>();
+
+            //If we already have the item just increase the quantity otherwise add a new item
+            if (Items.FirstOrDefault(x => x.ItemId == Guid.Parse(data)) != null)
+            {
+                Items.First(x => x.ItemId == Guid.Parse(data)).Quantity++;    
+            }
+            else
+            {
+                var item = new Item()
+                {
+                    ItemId = _item.ItemId,
+                    Name = _item.Name,
+                    Description = _item.Description,
+                    BuyPrice = _item.BuyPrice,
+                    SellPrice = _item.SellPrice,
+                    ShelfLife = _item.ShelfLife,
+                    Quantity = 1
+                };
+                
+                Items.Add(item);    
+            }
+            
         
             _action.Invoke();
         }
@@ -77,5 +94,10 @@ else
         {
             
         }
+    }
+
+    public class Item : Business.Models.Item
+    {
+        public int Quantity { get; set; }
     }
 }
