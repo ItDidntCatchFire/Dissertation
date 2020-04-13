@@ -13,11 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components" />
+      <ProjectReference Include="..\..\Business\Business.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Business\Business.csproj" />
+      <Folder Include="Components" />
     </ItemGroup>
 
 </Project>
