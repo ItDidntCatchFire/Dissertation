@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,8 +24,8 @@ namespace API
             services.AddSingleton<Repository.IItemRepository, DataLogic.List.ItemDL>();
             services.AddSingleton<Repository.IInventoryRepository, DataLogic.List.InventoryDL>();
             
-            services.AddSingleton<Business.Logic.ItemLogic, Business.Logic.ItemLogic>();
-            services.AddSingleton<Business.Logic.InventoryLogic, Business.Logic.InventoryLogic>();
+            services.AddSingleton<Business.Logic.ItemLogic>();
+            services.AddSingleton<Business.Logic.InventoryLogic>();
             
             services.AddCors(options =>
             {

@@ -44,7 +44,13 @@ namespace DataLogic.List
         {
             ListStore.inventory.AddRange(types);
             
-            return invId;
+            //They all have the same ID, so can just return the first
+            return types.First().InventoryId;
+        }
+
+        public async Task<IEnumerable<Models.InventoryDL>> GetListAsync()
+        {
+            return ListStore.inventory;
         }
     }
 }

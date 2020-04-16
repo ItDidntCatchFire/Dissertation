@@ -16,7 +16,6 @@ namespace API.Controllers
             _inventoryLogic = inventoryLogic;
         }
 
-
         [HttpGet("{inventoryId}")]
         public async Task<IActionResult> GetInventoryByInventoryId([FromRoute] Guid inventoryId)
         {
@@ -66,6 +65,20 @@ namespace API.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500, "Failure");
+            }
+        }
+
+        [HttpGet("List")]
+        public async Task<IActionResult> InventoryGetAll()
+        {
+            try
+            {
+                return Ok(await  _inventoryLogic.GetListAsync());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                                return StatusCode(500, "Failure");
             }
         }
         

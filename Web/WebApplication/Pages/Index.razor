@@ -8,14 +8,14 @@
     <input type="text" name="txt"/>
 </form>
 
-<button class="btn btn-primary" @onclick="Checkout">Checkout</button>
+<button class="btn btn-primary" disabled="@(!(Items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
 <Cart @ref="child" NFC="false" callBack="callback"/>
 
 
 @code
 {
-    private List<Cart.Item> Items;
+    private List<Cart.Item> Items = new List<Cart.Item>();
 
     private Cart child;
     
@@ -61,6 +61,7 @@
         InvId = await _HttpClient.PostJsonAsync<Guid>("https://192.168.0.103:5002/api/Inventory/List", Items);
         Items = new List<Cart.Item>();
         StateHasChanged();
+        child.Clear();
     }
 }
     

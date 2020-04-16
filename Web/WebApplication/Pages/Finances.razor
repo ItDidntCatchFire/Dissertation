@@ -1,0 +1,41 @@
+﻿@page "/Finances"
+@inject HttpClient Http
+
+@if (inventories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>InventoryId</th>
+            <th>ItemId</th>
+            <th>Quantity</th>
+            <th>Export</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var inventory in inventories)
+        {
+            <tr>
+                <td>@inventory.InventoryId</td>
+                <td>@inventory.ItemId</td>
+                <td>@inventory.Quantity</td>
+                <td>@inventory.Export</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Business.Models.Inventory> inventories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>("https://192.168.0.103:5002/api/Inventory/List");
+        
+    }
+}

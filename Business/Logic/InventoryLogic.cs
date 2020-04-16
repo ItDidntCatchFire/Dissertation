@@ -47,6 +47,16 @@ namespace Business.Logic
             return retVal;
         }
 
+        public Task DeleteAsync(Models.Inventory type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Models.Inventory type)
+        {
+            throw new NotImplementedException();
+        }
+        
         public async Task<Guid> InsertListAsync(IEnumerable<Models.Inventory> inventories)
         {
             var invId = Guid.NewGuid();
@@ -68,15 +78,26 @@ namespace Business.Logic
             var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
             return retVal;
         }
-
-        public Task DeleteAsync(Models.Inventory type)
+        
+        public async Task<IEnumerable<Models.Inventory>> GetListAsync()
         {
-            throw new NotImplementedException();
-        }
+            var inventoryDls = await _inventoryRepository.GetListAsync();
 
-        public Task UpdateAsync(Models.Inventory type)
-        {
-            throw new NotImplementedException();
+            var retVal = new List<Models.Inventory>();
+            foreach (var inventory in inventoryDls)
+            {
+                retVal.Add(new Models.Inventory()
+                {
+                    InventoryId = inventory.InventoryId,
+                    ItemId = inventory.ItemId,
+                    Created = inventory.Created,
+                    Export = inventory.Export,
+                    Quantity = inventory.Quantity,
+                    Value = inventory.Value
+                });
+            }
+            
+            return retVal;
         }
     }
 }
