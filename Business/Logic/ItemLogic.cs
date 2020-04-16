@@ -20,14 +20,16 @@ namespace Business.Logic
 
         public async Task<Models.Item> GetByIdAsync(Guid itemId)
         {
-            var item = await _itemRepository.GetByIdAsync(itemId);
+            var type = await _itemRepository.GetByIdAsync(itemId);
 
             return new Models.Item()
             {
-                ItemId = item.ItemId,
-                Name = item.Name,
-                Description = item.Description,
-                ShelfLife = item.ShelfLife
+                ItemId = type.ItemId,
+                Name = type.Name,
+                Description = type.Description,
+                ShelfLife = type.ShelfLife,
+                BuyPrice = type.BuyPrice,
+                SellPrice = type.SellPrice
             };
         }
 
@@ -38,7 +40,9 @@ namespace Business.Logic
                 ItemId = type.ItemId,
                 Name = type.Name,
                 Description = type.Description,
-                ShelfLife = type.ShelfLife
+                ShelfLife = type.ShelfLife,
+                BuyPrice = type.BuyPrice,
+                SellPrice = type.SellPrice 
             };
 
             var retVal = await _itemRepository.InsertAsync(itemDL);

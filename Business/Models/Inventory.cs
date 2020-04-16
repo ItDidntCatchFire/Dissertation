@@ -10,11 +10,13 @@ namespace Business.Models
         public DateTime Created { get; set; }
         public bool Export { get; set; }
         public decimal Value { get; set; }
-        public bool Ingredient { get; set; }
 
         public bool IsValid()
         {
-            throw new NotImplementedException();
+            if (ItemId != Guid.Empty)
+                if (Quantity != 0)
+                    return true;
+            return false;
         }
     }
 }

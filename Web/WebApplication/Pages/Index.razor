@@ -1,0 +1,67 @@
+﻿@page "/"
+@using Business.Models
+@inject NavigationManager NavigationManager
+@inject HttpClient _HttpClient;
+
+<form action="#" @onsubmit="Scan">
+    Guid to Scan
+    <input type="text" name="txt"/>
+</form>
+
+<button class="btn btn-primary" @onclick="Checkout">Checkout</button>
+@InvId
+<Cart @ref="child" NFC="false" callBack="callback"/>
+
+
+@code
+{
+    private List<Cart.Item> Items;
+
+    private Cart child;
+    
+    public void callback(List<Cart.Item> items)
+    {
+        Items = items;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        //Get the contents of the basket
+    // var timer = new System.Threading.Timer(
+    //     e => Scan(),  
+    //     null, 
+    //     TimeSpan.Zero, 
+    //     TimeSpan.FromMilliseconds(500));
+    }
+    
+    private void Scan()
+    {
+        child.UpdateMessage(Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"));
+        
+        StateHasChanged();
+    }
+
+    private Guid InvId;
+    private async void Checkout()
+    {
+        var inventory = new List<Business.Models.Inventory>();
+        foreach (var item in Items)
+        {
+            inventory.Add(new Inventory()
+            {
+                ItemId =  item.ItemId,
+                Created = DateTime.Now,
+                Quantity = item.Quantity,
+                Value = item.SellPrice,
+                Export = true
+            });
+        }
+        
+        InvId = await _HttpClient.PostJsonAsync<Guid>("https://192.168.0.103:5002/api/Inventory/List", Items);
+        Items = new List<Cart.Item>();
+        StateHasChanged();
+    }
+}
+    
+   

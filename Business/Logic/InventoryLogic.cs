@@ -27,7 +27,6 @@ namespace Business.Logic
                 ItemId = inventory.ItemId,
                 Created = inventory.Created,
                 Export = inventory.Export,
-                Ingredient = inventory.Ingredient,
                 Quantity = inventory.Quantity,
                 Value = inventory.Value
             };
@@ -40,12 +39,33 @@ namespace Business.Logic
                 ItemId = inventory.ItemId,
                 Created = inventory.Created,
                 Export = inventory.Export,
-                Ingredient = inventory.Ingredient,
                 Quantity = inventory.Quantity,
                 Value = inventory.Value
             };
 
             var retVal = await _inventoryRepository.InsertAsync(inventoryDL);
+            return retVal;
+        }
+
+        public async Task<Guid> InsertListAsync(IEnumerable<Models.Inventory> inventories)
+        {
+            var invId = Guid.NewGuid();
+            
+            var inventoryDLs = new List<DataLogic.Models.InventoryDL>();
+            foreach (var inventory in inventories)
+            {
+                inventoryDLs.Add(new DataLogic.Models.InventoryDL()
+                {
+                    InventoryId = invId,
+                    ItemId = inventory.ItemId,
+                    Created = inventory.Created,
+                    Export = inventory.Export,
+                    Quantity = inventory.Quantity,
+                    Value = inventory.Value
+                });
+            }
+            
+            var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
             return retVal;
         }
 
