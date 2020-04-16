@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("{itemId}")]
+        [HttpGet("{inventoryId}")]
         public async Task<IActionResult> GetInventoryByInventoryId([FromRoute] Guid inventoryId)
         {
             try
@@ -34,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertInventory([FromBody] Business.Models.Inventory inventory)
+        public async Task<IActionResult> InsertInventoryAsync([FromBody] Business.Models.Inventory inventory)
         {
             try
             {
@@ -49,5 +50,24 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
+        
+        [HttpPost ("List")]
+        public async Task<IActionResult> InsertInventoryListAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
+        {
+            try
+            {
+                foreach (var inventory in inventories)
+                    if (!inventory.IsValid())
+                        return BadRequest();
+
+                return Ok(await _inventoryLogic.InsertListAsync(inventories));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+        
     }
 }

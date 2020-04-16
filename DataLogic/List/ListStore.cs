@@ -12,8 +12,8 @@ namespace DataLogic.List
                 ItemId = Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"),
                 Name = "Stella",
                 Description = "Fruity",
-                BuyPrice = 1.00,
-                SellPrice = 2.00,
+                BuyPrice = 1.00m,
+                SellPrice = 2.00m,
                 ShelfLife = 365
             });
         }

@@ -10,6 +10,5 @@ namespace DataLogic.Models
         public DateTime Created { get; set; }
         public bool Export { get; set; }
         public decimal Value { get; set; }
-        public bool Ingredient { get; set; }
     }
 }

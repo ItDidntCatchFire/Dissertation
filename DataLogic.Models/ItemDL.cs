@@ -8,7 +8,7 @@ namespace DataLogic.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int ShelfLife { get; set; }
-        public double BuyPrice { get; set; }
-        public double SellPrice { get; set; }
+        public decimal BuyPrice { get; set; }
+        public decimal SellPrice { get; set; }
     }
 }

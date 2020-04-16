@@ -39,5 +39,12 @@ namespace DataLogic.List
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Guid> InsertListAsync(IEnumerable<Models.InventoryDL> types)
+        {
+            ListStore.inventory.AddRange(types);
+            
+            return invId;
+        }
     }
 }
