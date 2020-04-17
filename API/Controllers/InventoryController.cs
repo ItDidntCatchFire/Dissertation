@@ -16,7 +16,6 @@ namespace API.Controllers
             _inventoryLogic = inventoryLogic;
         }
 
-
         [HttpGet("{inventoryId}")]
         public async Task<IActionResult> GetInventoryByInventoryId([FromRoute] Guid inventoryId)
         {
@@ -50,9 +49,10 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
-        
-        [HttpPost ("List")]
-        public async Task<IActionResult> InsertInventoryListAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
+
+        [HttpPost("List")]
+        public async Task<IActionResult> InsertInventoryListAsync(
+            [FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
             try
             {
@@ -68,6 +68,19 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
-        
+
+        [HttpGet("List")]
+        public async Task<IActionResult> InventoryGetAll()
+        {
+            try
+            {
+                return Ok(await _inventoryLogic.GetListAsync());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
     }
 }

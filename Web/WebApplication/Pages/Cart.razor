@@ -5,15 +5,17 @@
 {
     <button @onclick="NFCPermission">
         Start Scanning
-    </button>    
+    </button>
 }
 else if (Items == null)
 {
-    <p><em>Please Scan Something</em></p>
+    <p>
+        <em>Please Scan Something</em>
+    </p>
 }
 else
 {
-    <p>Total Price @Items.Sum(x => (x.Quantity * x.SellPrice))</p>
+    <p>Total Price @Items.Sum(x => x.Quantity * x.SellPrice)</p>
     <div class="list-group overflow-auto" style="height: 60vh">
         @foreach (var item in Items)
         {
@@ -30,16 +32,16 @@ else
 }
 
 @code {
-    
+
     [Parameter]
     public List<Item> Items { get; set; }
 
     [Parameter]
     public Action<List<Item>> callBack { get; set; }
-    
+
     [Parameter]
     public bool NFC { get; set; }
-    
+
     private bool permission;
     private static Action<Guid> _action;
 
@@ -49,18 +51,18 @@ else
         if (NFC)
             NFCPermission();
     }
-    
+
     public async void UpdateMessage(Guid id)
     {
         var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>("https://192.168.0.103:5002/api/Item/" + id);
-            
+
         if (Items == null)
             Items = new List<Item>();
 
     //If we already have the item just increase the quantity otherwise add a new item
         if (Items.FirstOrDefault(x => x.ItemId == id) != null)
         {
-            Items.First(x => x.ItemId == id).Quantity++;    
+            Items.First(x => x.ItemId == id).Quantity++;
         }
         else
         {
@@ -74,15 +76,15 @@ else
                 ShelfLife = _item.ShelfLife,
                 Quantity = 1
             };
-                
-            Items.Add(item);    
+
+            Items.Add(item);
         }
-        
+
         StateHasChanged();
-        
+
         callBack.Invoke(Items);
     }
-    
+
     private async void NFCPermission()
     {
         permission = await JSRuntime.InvokeAsync<bool>("NFCScan");
@@ -97,8 +99,16 @@ else
         _action.Invoke(id);
     }
 
+    public void Clear()
+    {
+        Items = null;
+        StateHasChanged();
+    }
+
+
     public class Item : Business.Models.Item
     {
         public int Quantity { get; set; }
     }
+
 }

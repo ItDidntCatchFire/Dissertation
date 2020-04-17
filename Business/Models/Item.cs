@@ -10,6 +10,7 @@ namespace Business.Models
         public int ShelfLife { get; set; }
         public decimal BuyPrice { get; set; }
         public decimal SellPrice { get; set; }
+
         public bool IsValid()
         {
             if (ItemId.ToString() != "")
@@ -18,7 +19,7 @@ namespace Business.Models
                         if (ShelfLife != 0)
                             if (BuyPrice != 0)
                                 if (SellPrice != 0)
-                            return true;
+                                    return true;
             return false;
         }
     }

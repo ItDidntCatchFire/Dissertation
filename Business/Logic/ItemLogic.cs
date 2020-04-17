@@ -42,7 +42,7 @@ namespace Business.Logic
                 Description = type.Description,
                 ShelfLife = type.ShelfLife,
                 BuyPrice = type.BuyPrice,
-                SellPrice = type.SellPrice 
+                SellPrice = type.SellPrice
             };
 
             var retVal = await _itemRepository.InsertAsync(itemDL);
