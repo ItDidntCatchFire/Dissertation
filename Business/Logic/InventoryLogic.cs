@@ -56,14 +56,13 @@ namespace Business.Logic
         {
             throw new NotImplementedException();
         }
-        
+
         public async Task<Guid> InsertListAsync(IEnumerable<Models.Inventory> inventories)
         {
             var invId = Guid.NewGuid();
-            
+
             var inventoryDLs = new List<DataLogic.Models.InventoryDL>();
             foreach (var inventory in inventories)
-            {
                 inventoryDLs.Add(new DataLogic.Models.InventoryDL()
                 {
                     InventoryId = invId,
@@ -73,19 +72,17 @@ namespace Business.Logic
                     Quantity = inventory.Quantity,
                     Value = inventory.Value
                 });
-            }
-            
+
             var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
             return retVal;
         }
-        
+
         public async Task<IEnumerable<Models.Inventory>> GetListAsync()
         {
             var inventoryDls = await _inventoryRepository.GetListAsync();
 
             var retVal = new List<Models.Inventory>();
             foreach (var inventory in inventoryDls)
-            {
                 retVal.Add(new Models.Inventory()
                 {
                     InventoryId = inventory.InventoryId,
@@ -95,8 +92,7 @@ namespace Business.Logic
                     Quantity = inventory.Quantity,
                     Value = inventory.Value
                 });
-            }
-            
+
             return retVal;
         }
     }

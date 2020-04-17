@@ -43,7 +43,7 @@ namespace DataLogic.List
         public async Task<Guid> InsertListAsync(IEnumerable<Models.InventoryDL> types)
         {
             ListStore.inventory.AddRange(types);
-            
+
             //They all have the same ID, so can just return the first
             return types.First().InventoryId;
         }

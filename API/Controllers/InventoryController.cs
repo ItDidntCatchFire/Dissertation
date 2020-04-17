@@ -49,9 +49,10 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
-        
-        [HttpPost ("List")]
-        public async Task<IActionResult> InsertInventoryListAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
+
+        [HttpPost("List")]
+        public async Task<IActionResult> InsertInventoryListAsync(
+            [FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
             try
             {
@@ -73,14 +74,13 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await  _inventoryLogic.GetListAsync());
+                return Ok(await _inventoryLogic.GetListAsync());
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                                return StatusCode(500, "Failure");
+                return StatusCode(500, "Failure");
             }
         }
-        
     }
 }
