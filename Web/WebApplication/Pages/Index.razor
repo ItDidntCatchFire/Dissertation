@@ -59,6 +59,7 @@
                 Export = true
             });
         }
+        
         var response = await Utils.PostAsync("api/Inventory/List", Items);
         if (response.IsSuccessStatusCode)
         {

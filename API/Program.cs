@@ -1,7 +1,4 @@
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
 
 namespace API
@@ -19,7 +16,6 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("https://192.168.0.103:5002");
                 });
         }
     }

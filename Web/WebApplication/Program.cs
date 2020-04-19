@@ -6,7 +6,7 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
-            Utils.API_URL = "https://192.168.0.103:5002/";
+            Utils.API_URL = $"https://192.168.0.103:5321/";
             
             CreateHostBuilder(args).Build().Run();
         }
@@ -15,7 +15,7 @@ namespace WebApplication
         {
             var host = BlazorWebAssemblyHost.CreateDefaultBuilder()
                 .UseBlazorStartup<Startup>();
-
+            
             return host;
         }
     }

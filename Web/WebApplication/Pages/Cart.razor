@@ -54,7 +54,8 @@ else
 
     public async void UpdateMessage(Guid id)
     {
-        var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>("https://192.168.0.103:5002/api/Items/" + id);
+        
+        var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>($"{Utils.API_URL}api/Items/" + id);
 
         if (Items == null)
             Items = new List<Item>();
