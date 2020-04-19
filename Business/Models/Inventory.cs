@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Business.Models
 {
@@ -7,16 +8,18 @@ namespace Business.Models
         public Guid InventoryId { get; set; }
         public Guid ItemId { get; set; }
         public int Quantity { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Time { get; set; }
         public bool Export { get; set; }
         public decimal Value { get; set; }
 
-        public bool IsValid()
+        public IEnumerable<string> Validate()
         {
-            if (ItemId != Guid.Empty)
-                if (Quantity != 0)
-                    return true;
-            return false;
+            var invalidReasons = new List<string>();
+            
+            if (Quantity <= -1)
+                invalidReasons.Add("Quantity missing");
+            
+            return invalidReasons;
         }
     }
 }

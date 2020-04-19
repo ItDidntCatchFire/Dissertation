@@ -38,10 +38,14 @@ namespace API.Controllers
         {
             try
             {
-                if (inventory.IsValid())
-                    return Ok(await _inventoryLogic.InsertAsync(inventory));
+                var validation = Business.Validation.Validator.ValidateModel(inventory);
 
-                return BadRequest();
+                if (validation.IsValid)
+                {
+                    return Ok(await _inventoryLogic.InsertAsync(inventory));
+                }
+                
+                return BadRequest(validation.Reasons);
             }
             catch (Exception ex)
             {
@@ -56,11 +60,15 @@ namespace API.Controllers
         {
             try
             {
+                var validation = new Business.Validation.ValidationResult();
+                
                 foreach (var inventory in inventories)
-                    if (!inventory.IsValid())
-                        return BadRequest();
+                    validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
 
-                return Ok(await _inventoryLogic.InsertListAsync(inventories));
+                if (validation.IsValid)
+                    return Ok(await _inventoryLogic.InsertListAsync(inventories));
+
+                return BadRequest(validation.Reasons);
             }
             catch (Exception ex)
             {
@@ -74,7 +82,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await _inventoryLogic.GetListAsync());
+                return Ok(await _inventoryLogic.ListAsync());
             }
             catch (Exception ex)
             {

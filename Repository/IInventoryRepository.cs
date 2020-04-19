@@ -7,7 +7,5 @@ namespace Repository
     public interface IInventoryRepository : IRepository<DataLogic.Models.InventoryDL, Guid>
     {
         Task<Guid> InsertListAsync(IEnumerable<DataLogic.Models.InventoryDL> types);
-
-        Task<IEnumerable<DataLogic.Models.InventoryDL>> GetListAsync();
     }
 }

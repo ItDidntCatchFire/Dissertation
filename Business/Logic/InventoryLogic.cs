@@ -13,9 +13,23 @@ namespace Business.Logic
             _inventoryRepository = inventoryRepository;
         }
 
-        public Task<IEnumerable<Models.Inventory>> ListAsync()
+        public async Task<IEnumerable<Models.Inventory>> ListAsync()
         {
-            throw new NotImplementedException();
+            var inventoryDls = await _inventoryRepository.ListAsync();
+
+            var retVal = new List<Models.Inventory>();
+            foreach (var inventory in inventoryDls)
+                retVal.Add(new Models.Inventory()
+                {
+                    InventoryId = inventory.InventoryId,
+                    ItemId = inventory.ItemId,
+                    Time = inventory.Created,
+                    Export = inventory.Export,
+                    Quantity = inventory.Quantity,
+                    Value = inventory.Value
+                });
+
+            return retVal;
         }
 
         public async Task<Models.Inventory> GetByIdAsync(Guid inventoryId)
@@ -25,26 +39,38 @@ namespace Business.Logic
             {
                 InventoryId = inventory.InventoryId,
                 ItemId = inventory.ItemId,
-                Created = inventory.Created,
+                Time = inventory.Created,
                 Export = inventory.Export,
                 Quantity = inventory.Quantity,
                 Value = inventory.Value
             };
         }
 
-        public async Task<Guid> InsertAsync(Models.Inventory inventory)
+        public async Task<Models.Inventory> InsertAsync(Models.Inventory inventory)
         {
+            var inventoryId = Guid.NewGuid();
+            var time = DateTime.Now;
             var inventoryDL = new DataLogic.Models.InventoryDL()
             {
+                InventoryId = inventoryId,
                 ItemId = inventory.ItemId,
-                Created = inventory.Created,
+                Created = time,
                 Export = inventory.Export,
                 Quantity = inventory.Quantity,
                 Value = inventory.Value
             };
 
             var retVal = await _inventoryRepository.InsertAsync(inventoryDL);
-            return retVal;
+            
+            return new Models.Inventory()
+            {
+                InventoryId = retVal.InventoryId,
+                ItemId = retVal.ItemId,
+                Time = retVal.Created,
+                Export = retVal.Export,
+                Quantity = retVal.Quantity,
+                Value = retVal.Value
+            };
         }
 
         public Task DeleteAsync(Models.Inventory type)
@@ -67,32 +93,13 @@ namespace Business.Logic
                 {
                     InventoryId = invId,
                     ItemId = inventory.ItemId,
-                    Created = inventory.Created,
+                    Created = inventory.Time,
                     Export = inventory.Export,
                     Quantity = inventory.Quantity,
                     Value = inventory.Value
                 });
 
             var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
-            return retVal;
-        }
-
-        public async Task<IEnumerable<Models.Inventory>> GetListAsync()
-        {
-            var inventoryDls = await _inventoryRepository.GetListAsync();
-
-            var retVal = new List<Models.Inventory>();
-            foreach (var inventory in inventoryDls)
-                retVal.Add(new Models.Inventory()
-                {
-                    InventoryId = inventory.InventoryId,
-                    ItemId = inventory.ItemId,
-                    Created = inventory.Created,
-                    Export = inventory.Export,
-                    Quantity = inventory.Quantity,
-                    Value = inventory.Value
-                });
-
             return retVal;
         }
     }

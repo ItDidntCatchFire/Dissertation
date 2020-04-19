@@ -14,20 +14,15 @@ namespace DataLogic.List
     public class InventoryDL : Models.InventoryDL, IInventoryRepository
     {
         public async Task<IEnumerable<Models.InventoryDL>> ListAsync()
-        {
-            throw new NotImplementedException();
-        }
+            => ListStore.inventory;
 
         public async Task<Models.InventoryDL> GetByIdAsync(Guid id)
-        {
-            return ListStore.inventory.FirstOrDefault(x => x.InventoryId == id);
-        }
+            => ListStore.inventory.FirstOrDefault(x => x.InventoryId == id);
 
-        public async Task<Guid> InsertAsync(Models.InventoryDL type)
+        public async Task<Models.InventoryDL> InsertAsync(Models.InventoryDL type)
         {
-            type.InventoryId = Guid.NewGuid();
             ListStore.inventory.Add(type);
-            return type.InventoryId;
+            return type;
         }
 
         public async Task DeleteAsync(Models.InventoryDL type)
@@ -46,11 +41,6 @@ namespace DataLogic.List
 
             //They all have the same ID, so can just return the first
             return types.First().InventoryId;
-        }
-
-        public async Task<IEnumerable<Models.InventoryDL>> GetListAsync()
-        {
-            return ListStore.inventory;
         }
     }
 }

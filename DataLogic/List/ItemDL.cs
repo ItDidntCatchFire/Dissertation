@@ -13,9 +13,9 @@ namespace DataLogic.List
 
     public class ItemDL : Models.ItemDL, IItemRepository
     {
-        public Task<IEnumerable<Models.ItemDL>> ListAsync()
+        public async Task<IEnumerable<Models.ItemDL>> ListAsync()
         {
-            throw new NotImplementedException();
+            return ListStore.items;
         }
 
         public async Task<Models.ItemDL> GetByIdAsync(Guid id)
@@ -23,11 +23,10 @@ namespace DataLogic.List
             return ListStore.items.FirstOrDefault(x => x.ItemId == id);
         }
 
-        public async Task<Guid> InsertAsync(Models.ItemDL type)
+        public async Task<Models.ItemDL> InsertAsync(Models.ItemDL type)
         {
-            type.ItemId = Guid.NewGuid();
             ListStore.items.Add(type);
-            return type.ItemId;
+            return type;
         }
 
         public Task DeleteAsync(Models.ItemDL type)
@@ -35,9 +34,10 @@ namespace DataLogic.List
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(Models.ItemDL type)
+        public async Task UpdateAsync(Models.ItemDL type)
         {
-            throw new NotImplementedException();
+            var index =  ListStore.items.FindIndex(x => x.ItemId == type.ItemId);
+            ListStore.items[index] = type;
         }
     }
 }

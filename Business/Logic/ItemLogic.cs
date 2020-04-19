@@ -13,9 +13,22 @@ namespace Business.Logic
             _itemRepository = itemRepository;
         }
 
-        public Task<IEnumerable<Models.Item>> ListAsync()
+        public async Task<IEnumerable<Models.Item>> ListAsync()
         {
-            throw new NotImplementedException();
+            var itemDLs = await _itemRepository.ListAsync();
+            var retVal = new List<Models.Item>();
+            foreach (var item in itemDLs)
+                retVal.Add(new Models.Item()
+                {
+                    ItemId =  item.ItemId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    BuyPrice = item.BuyPrice,
+                    SellPrice = item.SellPrice,
+                    ShelfLife = item.ShelfLife
+                });
+            
+            return retVal;
         }
 
         public async Task<Models.Item> GetByIdAsync(Guid itemId)
@@ -33,7 +46,37 @@ namespace Business.Logic
             };
         }
 
-        public async Task<Guid> InsertAsync(Models.Item type)
+        public async Task<Models.Item> InsertAsync(Models.Item type)
+        {
+            var itemDL = new DataLogic.Models.ItemDL()
+            {
+                ItemId = Guid.NewGuid(),
+                Name = type.Name,
+                Description = type.Description,
+                ShelfLife = type.ShelfLife,
+                BuyPrice = type.BuyPrice,
+                SellPrice = type.SellPrice
+            };
+
+            var retVal = await _itemRepository.InsertAsync(itemDL);
+            
+            return new Models.Item()
+            {
+                ItemId = retVal.ItemId,
+                Name = retVal.Name,
+                Description = retVal.Description,
+                ShelfLife = retVal.ShelfLife,
+                BuyPrice = retVal.BuyPrice,
+                SellPrice = retVal.SellPrice
+            };
+        }
+
+        public Task DeleteAsync(Models.Item type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateAsync(Models.Item type)
         {
             var itemDL = new DataLogic.Models.ItemDL()
             {
@@ -45,18 +88,7 @@ namespace Business.Logic
                 SellPrice = type.SellPrice
             };
 
-            var retVal = await _itemRepository.InsertAsync(itemDL);
-            return retVal;
-        }
-
-        public Task DeleteAsync(Models.Item type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Models.Item type)
-        {
-            throw new NotImplementedException();
+            await _itemRepository.UpdateAsync(itemDL);
         }
     }
 }

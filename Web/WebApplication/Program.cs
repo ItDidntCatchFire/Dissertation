@@ -6,6 +6,8 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
+            Utils.API_URL = "https://192.168.0.103:5002/";
+            
             CreateHostBuilder(args).Build().Run();
         }
 
