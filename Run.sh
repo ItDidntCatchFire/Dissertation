@@ -10,8 +10,6 @@ dotnet run -v q --urls https://0.0.0.0:5322 > /dev/null &
 WEB_ID=$!
 echo $WEB_ID
 
-
-clear
 set -e
 trap error SIGHUP
 
