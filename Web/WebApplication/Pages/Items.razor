@@ -105,7 +105,7 @@ else
     {
         _action = () => { message = "Written"; };
         item = new Business.Models.Item();
-        items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>("https://192.168.0.103:5002/api/Items/List");
+        items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>($"{Utils.API_URL}api/Items/List");
     }
 
     private async Task Add()

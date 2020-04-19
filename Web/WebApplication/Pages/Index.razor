@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Business.Models
+@using Newtonsoft.Json
 @inject NavigationManager NavigationManager
 @inject HttpClient _HttpClient;
 
@@ -58,10 +59,14 @@
                 Export = true
             });
         }
-
-        InvId = await _HttpClient.PostJsonAsync<Guid>("https://192.168.0.103:5002/api/Inventory/List", Items);
-        Items = new List<Cart.Item>();
-        StateHasChanged();
-        child.Clear();
+        var response = await Utils.PostAsync("api/Inventory/List", Items);
+        if (response.IsSuccessStatusCode)
+        {
+            InvId = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
+        
+            Items = new List<Cart.Item>();
+            StateHasChanged();
+            child.Clear();    
+        }
     }
 }

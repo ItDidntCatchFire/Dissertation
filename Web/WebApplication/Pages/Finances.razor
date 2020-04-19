@@ -107,7 +107,7 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>("https://192.168.0.103:5002/api/Inventory/List");
+        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>($"{Utils.API_URL}api/Inventory/List");
 
         query = from inventory in inventories
             group inventory by inventory.InventoryId
