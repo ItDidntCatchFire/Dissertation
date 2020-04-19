@@ -20,7 +20,7 @@ namespace API.Controllers
         {
             try
             {
-                if (itemId.ToString() != "")
+                if (itemId != Guid.Empty)
                     return Ok(await _itemLogic.GetByIdAsync(itemId));
 
                 return BadRequest();

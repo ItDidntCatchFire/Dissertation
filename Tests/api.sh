@@ -180,7 +180,6 @@ else
 	kill -1 $$
 fi;
 
-printf "\t\n"
 printf "\t\tAll Broken\n"
 if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json' -d '{"itemId":"00000000-0000-0000-0000-000000000000","name":"","description":"","shelfLife":-1,"buyPrice":-1.0,"sellPrice":-1.0}') == 400 ]]
 then 
@@ -196,7 +195,6 @@ else
 	kill -1 $$
 fi;
 
-printf "\t\n"
 printf "\t\tAll Fixed\n"
 if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json' -d '{"itemId":"00000000-0000-0000-0000-000000000000","name":"TestName","description":"TestDescrption","shelfLife":45,"buyPrice":10.50,"sellPrice":13.05}') == 200 ]]
 then 
@@ -212,8 +210,67 @@ else
 	kill -1 $$
 fi;
 
-
 printf "\tGet\n"
+printf "\t\tEMPTY Guid\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/00000000-0000-0000-0000-000000000000) == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected="Bad Request"    
+    if [[ "$var" != *"$Expected"* ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\tEMPTY\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/) == 404 ]]
+then 
+    var=$(<results.txt)
+    Expected=""    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\tSPACE\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/ ) == 404 ]]
+then 
+    var=$(<results.txt)
+    Expected=""    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\tUNKNOWN\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/1f8fad5b-d9cb-469f-a165-70867728950e) == 500 ]]
+then 
+    var=$(<results.txt)
+    Expected="Failure"    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
 printf "\t\tKNOWN\n"
 if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/0f8fad5b-d9cb-469f-a165-70867728950e) == 200 ]]
 then 
