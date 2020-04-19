@@ -1,5 +1,6 @@
 ﻿@page "/Items"
 @using Newtonsoft.Json
+@inject IJSRuntime JSRuntime;
 @inject HttpClient _HttpClient;
 
 <h1>Items</h1>
@@ -60,6 +61,7 @@ else
         }
             
         <button class="btn btn-primary" @onclick="ClearIndex">Clear</button>
+        <button class="btn btn-primary" @onclick="Write">Write</button>
     </EditForm>
     
     <br/>
@@ -95,11 +97,13 @@ else
 @code {
     private List<Business.Models.Item> items;
     private Business.Models.Item item;
-    
+
+    private static Action _action;
     private string message = "";
     
     protected override async Task OnInitializedAsync()
     {
+        _action = () => { message = "Written"; };
         item = new Business.Models.Item();
         items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>("https://192.168.0.103:5002/api/Items/List");
     }
@@ -139,5 +143,16 @@ else
         message = "";
         item = new Business.Models.Item();
         StateHasChanged();
+    }
+    
+    [JSInvokable]
+    public static void Written()
+    {
+        _action.Invoke();
+    }
+
+    private void Write()
+    {
+        JSRuntime.InvokeAsync<bool>("NFCWrite", item.ItemId);
     }
 }
