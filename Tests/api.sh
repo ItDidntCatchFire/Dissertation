@@ -1,5 +1,4 @@
 #!/bin/bash
-Run.sh
 
 #Get IP
 rm ip.txt

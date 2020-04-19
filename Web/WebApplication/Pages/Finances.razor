@@ -1,6 +1,6 @@
 ﻿@page "/Finances"
 @inject HttpClient Http
-
+@inject Task<string> getURLTask
 @if (inventories == null)
 {
     <p>
@@ -106,7 +106,7 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>($"{Utils.API_URL}api/Inventory/List");
+        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>($"{await getURLTask}api/Inventory/List");
 
         query = from inventory in inventories
             group inventory by inventory.InventoryId

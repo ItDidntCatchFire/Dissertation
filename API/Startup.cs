@@ -35,8 +35,7 @@ namespace API
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowCredentials();
+                            .AllowAnyHeader();
                     });
             });
 

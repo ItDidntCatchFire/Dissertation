@@ -2,7 +2,7 @@
 @using Newtonsoft.Json
 @inject IJSRuntime JSRuntime;
 @inject HttpClient _HttpClient;
-
+@inject Task<string> getURLTask
 <h1>Items</h1>
 
 @if (items == null)
@@ -105,7 +105,7 @@ else
     {
         _action = () => { message = "Written"; };
         item = new Business.Models.Item();
-        items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>($"{Utils.API_URL}api/Items/List");
+        items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>($"{await getURLTask}api/Items/List");
     }
 
     private async Task Add()

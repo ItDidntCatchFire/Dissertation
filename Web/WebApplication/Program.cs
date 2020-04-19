@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using System.Net;
+using System.Net.Http;
+using Microsoft.AspNetCore.Blazor.Hosting;
 
 namespace WebApplication
 {
@@ -6,8 +8,6 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
-            Utils.API_URL = $"https://192.168.0.103:5321/";
-            
             CreateHostBuilder(args).Build().Run();
         }
 

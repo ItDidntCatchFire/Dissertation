@@ -7,7 +7,6 @@ namespace WebApplication
 {
     public static class Utils
     {
-        public static string API_URL { get; set; }
         public static async Task<HttpResponseMessage> PostAsync(string url, object data)
         {
             var json = JsonConvert.SerializeObject(data);
@@ -16,7 +15,7 @@ namespace WebApplication
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var httpClient = new HttpClient();
-            return await httpClient.PostAsync($"{API_URL}{url}", byteContent);
+            return await httpClient.PostAsync(url, byteContent);
         }
     }
 }

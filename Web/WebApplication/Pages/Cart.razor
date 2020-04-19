@@ -1,5 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime;
 @inject HttpClient _HttpClient;
+@inject Task<string> getURLTask;
 
 @if (@NFC && !@permission)
 {
@@ -55,7 +56,7 @@ else
     public async void UpdateMessage(Guid id)
     {
         
-        var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>($"{Utils.API_URL}api/Items/" + id);
+        var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>($"{await getURLTask}api/Items/" + id);
 
         if (Items == null)
             Items = new List<Item>();
