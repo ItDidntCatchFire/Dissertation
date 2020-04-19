@@ -17,7 +17,6 @@ export PATH=$PATH:$HOME/dotnet-arm32
 #JSON parser
 sudo apt-get install jq
 
-
 cd Documents
 
 #Set up ngrok
@@ -33,20 +32,25 @@ cd Dissertation
 #Start Api
 cd API
 dotnet publish -c Release --self-contained -r linux-arm
-
-
-dotnet run -v q --urls https://0.0.0.0:5321 > /dev/null &
-API_ID=$!
-echo $API_ID
+cd bin/Release/netcoreapp3.1/linux-arm/publish
+nohup dotnet API.dll --urls https://0.0.0.0:5321 > /dev/null 2>&1 &
+cd ../../../../../../../
+./ngrok http https://localhost:5321
 
 #Save the URL
-cd ../Web/WebApplication/wwwroot
+cd Dissertation/Web/WebApplication/wwwroot
 rm ip.json
-echo "\"$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+')\"" >> ip.json
+#Get ip from ngrok
+echo "\"$(curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url)/\"" >>ip.json
+#Get IP if on device
+#echo "\"https://$(ip addr show wlan0 | grep -Po 'inet \K[\d.]+'):5321/\"" >> ip.json
 
 #Start the website
 cd ..
-dotnet run -v q --urls https://0.0.0.0:5322 > /dev/null &
-WEB_ID=$!
-echo $WEB_ID
+dotnet publish -c Release --self-contained -r linux-arm
+#nohup dotnet run -v q --urls https://0.0.0.0:5322 > /dev/null 2>&1 &
+
+cd bin/Release/netstandard2.0/linux-arm/publish
+nohup dotnet run WebApplication --urls https://0.0.0.0:5322 > /dev/null 2>&1 &
+
 

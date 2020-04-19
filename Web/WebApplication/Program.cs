@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
-using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
 namespace WebApplication
 {

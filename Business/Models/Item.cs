@@ -31,20 +31,20 @@ namespace Business.Models
         {
             var invalidReasons = new List<string>();
 
-            if (String.IsNullOrEmpty(Name) && String.IsNullOrWhiteSpace(Name))
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrWhiteSpace(Name))
                 invalidReasons.Add("Name missing");
             
-            if (String.IsNullOrEmpty(Description) && String.IsNullOrWhiteSpace(Description))
+            if (String.IsNullOrEmpty(Description) || String.IsNullOrWhiteSpace(Description))
                 invalidReasons.Add("Description missing");
             
             if (ShelfLife <= -1)
-                invalidReasons.Add("ShelfLife missing");
+                invalidReasons.Add("ShelfLife negative");
             
             if (BuyPrice <= -1)
-                invalidReasons.Add("BuyPrice missing");
+                invalidReasons.Add("BuyPrice negative");
             
             if (SellPrice <= -1)
-                invalidReasons.Add("SellPrice missing");
+                invalidReasons.Add("SellPrice negative");
             
             return invalidReasons;
         }
