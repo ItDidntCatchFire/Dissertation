@@ -10,14 +10,3 @@ dotnet run -v q --urls https://0.0.0.0:5322 > /dev/null &
 WEB_ID=$!
 echo $WEB_ID
 
-set -e
-trap error SIGHUP
-
-function error()
-{
-	
-    kill $API_ID
-    kill $WEB_ID
-    
-	exit 1
-}
