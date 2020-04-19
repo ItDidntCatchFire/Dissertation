@@ -285,3 +285,11 @@ else
     printf "  http code Fail\n"
 	kill -1 $$
 fi;
+
+printf "\tList\n"
+printf "\t\tGet\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List) != 200 ]]
+then 
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
