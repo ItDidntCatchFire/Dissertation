@@ -33,7 +33,7 @@ cd Dissertation
 cd API
 dotnet publish -c Release --self-contained -r linux-arm
 cd bin/Release/netcoreapp3.1/linux-arm/publish
-nohup dotnet API.dll --urls https://0.0.0.0:5321 > /dev/null 2>&1 &
+nohup dotnet API.dll --urls "https://$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+'):5321" > /dev/null 2>&1 &
 cd ../../../../../../../
 ./ngrok http https://localhost:5321
 
@@ -51,6 +51,6 @@ dotnet publish -c Release --self-contained -r linux-arm
 #nohup dotnet run -v q --urls https://0.0.0.0:5322 > /dev/null 2>&1 &
 
 cd bin/Release/netstandard2.0/linux-arm/publish
-nohup dotnet run WebApplication --urls https://0.0.0.0:5322 > /dev/null 2>&1 &
+nohup dotnet run WebApplication --urls "https://$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+'):5322" > /dev/null 2>&1 &
 
 

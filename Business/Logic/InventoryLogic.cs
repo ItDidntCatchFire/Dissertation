@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Business.Logic
 {
-    public class InventoryLogic : ILogic<Models.Inventory, Guid>
+    public class InventoryLogic : ILogic<IEnumerable<Models.Inventory>, Guid>
     {
         private readonly Repository.IInventoryRepository _inventoryRepository;
 
@@ -12,95 +13,89 @@ namespace Business.Logic
         {
             _inventoryRepository = inventoryRepository;
         }
-
+        
         public async Task<IEnumerable<Models.Inventory>> ListAsync()
         {
-            var inventoryDls = await _inventoryRepository.ListAsync();
-
+            var inventoryDLs = await _inventoryRepository.ListAsync();
+            
             var retVal = new List<Models.Inventory>();
-            foreach (var inventory in inventoryDls)
-                retVal.Add(new Models.Inventory()
-                {
-                    InventoryId = inventory.InventoryId,
-                    ItemId = inventory.ItemId,
-                    Time = inventory.Created,
-                    Export = inventory.Export,
-                    Quantity = inventory.Quantity,
-                    Value = inventory.Value
-                });
+            
+            foreach (var inventoryDL in inventoryDLs)
+               retVal.Add(new Models.Inventory()
+                    {
+                        InventoryId = inventoryDL.InventoryId,
+                        ItemId = inventoryDL.ItemId,
+                        Time = inventoryDL.Created,
+                        Export = inventoryDL.Export,
+                        Quantity = inventoryDL.Quantity,
+                        Monies = inventoryDL.Value
+                    });
 
             return retVal;
         }
 
-        public async Task<Models.Inventory> GetByIdAsync(Guid inventoryId)
+        public async Task<IEnumerable<Models.Inventory>> GetByIdAsync(Guid inventoryId)
         {
             var inventory = await _inventoryRepository.GetByIdAsync(inventoryId);
-            return new Models.Inventory()
-            {
-                InventoryId = inventory.InventoryId,
-                ItemId = inventory.ItemId,
-                Time = inventory.Created,
-                Export = inventory.Export,
-                Quantity = inventory.Quantity,
-                Value = inventory.Value
-            };
-        }
-
-        public async Task<Models.Inventory> InsertAsync(Models.Inventory inventory)
-        {
-            var inventoryId = Guid.NewGuid();
-            var time = DateTime.Now;
-            var inventoryDL = new DataLogic.Models.InventoryDL()
-            {
-                InventoryId = inventoryId,
-                ItemId = inventory.ItemId,
-                Created = time,
-                Export = inventory.Export,
-                Quantity = inventory.Quantity,
-                Value = inventory.Value
-            };
-
-            var retVal = await _inventoryRepository.InsertAsync(inventoryDL);
             
-            return new Models.Inventory()
+            var inventories = new List<Models.Inventory>();
+            foreach (var inv in inventory)
             {
-                InventoryId = retVal.InventoryId,
-                ItemId = retVal.ItemId,
-                Time = retVal.Created,
-                Export = retVal.Export,
-                Quantity = retVal.Quantity,
-                Value = retVal.Value
-            };
+                inventories.Add(new Models.Inventory()
+                {
+                    InventoryId = inv.InventoryId,
+                    ItemId = inv.ItemId,
+                    Time = inv.Created,
+                    Export = inv.Export,
+                    Quantity = inv.Quantity,
+                    Monies = inv.Value
+                });
+            }
+
+            return inventories;
         }
 
-        public Task DeleteAsync(Models.Inventory type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Models.Inventory type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Guid> InsertListAsync(IEnumerable<Models.Inventory> inventories)
+        public async Task<IEnumerable<Models.Inventory>> InsertAsync(IEnumerable<Models.Inventory> inventory)
         {
             var invId = Guid.NewGuid();
 
             var inventoryDLs = new List<DataLogic.Models.InventoryDL>();
-            foreach (var inventory in inventories)
+            foreach (var inven in inventory)
                 inventoryDLs.Add(new DataLogic.Models.InventoryDL()
                 {
                     InventoryId = invId,
-                    ItemId = inventory.ItemId,
-                    Created = inventory.Time,
-                    Export = inventory.Export,
-                    Quantity = inventory.Quantity,
-                    Value = inventory.Value
+                    ItemId = inven.ItemId,
+                    Created = inven.Time,
+                    Export = inven.Export,
+                    Quantity = inven.Quantity,
+                    Value = inven.Monies
                 });
 
-            var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
+            var inventoryDls = await _inventoryRepository.InsertAsync(inventoryDLs);
+            
+            var retVal = new List<Models.Inventory>();
+            foreach (var inv in inventoryDls)
+                retVal.Add(new Models.Inventory()
+                {
+                    InventoryId = inv.InventoryId,
+                    ItemId = inv.ItemId,
+                    Time = inv.Created,
+                    Export = inv.Export,
+                    Quantity = inv.Quantity,
+                    Monies = inv.Value
+                });
+            
             return retVal;
+        }
+
+        public Task DeleteAsync(IEnumerable<Models.Inventory> type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(IEnumerable<Models.Inventory> type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

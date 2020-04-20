@@ -10,14 +10,17 @@ namespace Business.Models
         public int Quantity { get; set; }
         public DateTime Time { get; set; }
         public bool Export { get; set; }
-        public decimal Value { get; set; }
+        public decimal Monies { get; set; }
 
         public IEnumerable<string> Validate()
         {
             var invalidReasons = new List<string>();
             
             if (Quantity <= -1)
-                invalidReasons.Add("Quantity missing");
+                invalidReasons.Add("Quantity negative");
+            
+            if (Monies <= -1)
+                invalidReasons.Add("Monies negative");
             
             return invalidReasons;
         }

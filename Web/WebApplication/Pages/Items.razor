@@ -3,7 +3,10 @@
 @inject IJSRuntime JSRuntime;
 @inject HttpClient _HttpClient;
 @inject Task<string> getURLTask
+
 <h1>Items</h1>
+
+
 
 @if (items == null)
 {
@@ -127,7 +130,7 @@ else
     {
         message = "";
         
-        var response = await Utils.PostAsync("api/Items/Update", item);
+        var response = await Utils.PostAsync($"{await getURLTask}api/Items/Update", item);
         
         if (response.IsSuccessStatusCode)
         {

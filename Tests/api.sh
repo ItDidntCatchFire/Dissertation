@@ -1,20 +1,21 @@
 #!/bin/bash
 Expected=""
+Port=5007
+IP=$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+')
 
+#Port=5001
+#IP="0.0.0.0"
+
+#Start the process
 cd ../API
-nohup dotnet run --urls https://0.0.0.0:5321 > /dev/null 2>&1 &
+nohup dotnet run --urls "https://${IP}:${Port}" > /dev/null 2>&1 &
 sleep 5
 
-#Get IP
-cd ../Web/WebApplication/wwwroot
-rm ip.json
-echo "\"https://$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+'):5321/\"" >> ip.json
-ip=$(<ip.json)
 
-cd ../../../Tests
-host=$"${ip:1:-1}api/"
+cd ../Tests
+host=$"https://${IP}:${Port}/api/"
 printf $"Host ${host}\n"
-
+rm "results.txt"
 
 set -e
 trap error SIGHUP
@@ -35,8 +36,6 @@ function error()
 	cat results.txt
 	exit 1
 }
-
-
 
 printf "Item\n"
 printf "\tInsert\n"
