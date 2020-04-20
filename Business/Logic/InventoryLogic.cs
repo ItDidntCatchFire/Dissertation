@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Business.Logic
 {
-    public class InventoryLogic : ILogic<Models.Inventory, Guid>
+    public class InventoryLogic : ILogic<IEnumerable<Models.Inventory>, Guid>
     {
         private readonly Repository.IInventoryRepository _inventoryRepository;
 
@@ -12,88 +13,89 @@ namespace Business.Logic
         {
             _inventoryRepository = inventoryRepository;
         }
-
-        public Task<IEnumerable<Models.Inventory>> ListAsync()
+        
+        public async Task<IEnumerable<Models.Inventory>> ListAsync()
         {
-            throw new NotImplementedException();
-        }
+            var inventoryDLs = await _inventoryRepository.ListAsync();
+            
+            var retVal = new List<Models.Inventory>();
+            
+            foreach (var inventoryDL in inventoryDLs)
+               retVal.Add(new Models.Inventory()
+                    {
+                        InventoryId = inventoryDL.InventoryId,
+                        ItemId = inventoryDL.ItemId,
+                        Time = inventoryDL.Created,
+                        Export = inventoryDL.Export,
+                        Quantity = inventoryDL.Quantity,
+                        Monies = inventoryDL.Value
+                    });
 
-        public async Task<Models.Inventory> GetByIdAsync(Guid inventoryId)
-        {
-            var inventory = await _inventoryRepository.GetByIdAsync(inventoryId);
-            return new Models.Inventory()
-            {
-                InventoryId = inventory.InventoryId,
-                ItemId = inventory.ItemId,
-                Created = inventory.Created,
-                Export = inventory.Export,
-                Quantity = inventory.Quantity,
-                Value = inventory.Value
-            };
-        }
-
-        public async Task<Guid> InsertAsync(Models.Inventory inventory)
-        {
-            var inventoryDL = new DataLogic.Models.InventoryDL()
-            {
-                ItemId = inventory.ItemId,
-                Created = inventory.Created,
-                Export = inventory.Export,
-                Quantity = inventory.Quantity,
-                Value = inventory.Value
-            };
-
-            var retVal = await _inventoryRepository.InsertAsync(inventoryDL);
             return retVal;
         }
 
-        public Task DeleteAsync(Models.Inventory type)
+        public async Task<IEnumerable<Models.Inventory>> GetByIdAsync(Guid inventoryId)
         {
-            throw new NotImplementedException();
+            var inventory = await _inventoryRepository.GetByIdAsync(inventoryId);
+            
+            var inventories = new List<Models.Inventory>();
+            foreach (var inv in inventory)
+            {
+                inventories.Add(new Models.Inventory()
+                {
+                    InventoryId = inv.InventoryId,
+                    ItemId = inv.ItemId,
+                    Time = inv.Created,
+                    Export = inv.Export,
+                    Quantity = inv.Quantity,
+                    Monies = inv.Value
+                });
+            }
+
+            return inventories;
         }
 
-        public Task UpdateAsync(Models.Inventory type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Guid> InsertListAsync(IEnumerable<Models.Inventory> inventories)
+        public async Task<IEnumerable<Models.Inventory>> InsertAsync(IEnumerable<Models.Inventory> inventory)
         {
             var invId = Guid.NewGuid();
 
             var inventoryDLs = new List<DataLogic.Models.InventoryDL>();
-            foreach (var inventory in inventories)
+            foreach (var inven in inventory)
                 inventoryDLs.Add(new DataLogic.Models.InventoryDL()
                 {
                     InventoryId = invId,
-                    ItemId = inventory.ItemId,
-                    Created = inventory.Created,
-                    Export = inventory.Export,
-                    Quantity = inventory.Quantity,
-                    Value = inventory.Value
+                    ItemId = inven.ItemId,
+                    Created = inven.Time,
+                    Export = inven.Export,
+                    Quantity = inven.Quantity,
+                    Value = inven.Monies
                 });
 
-            var retVal = await _inventoryRepository.InsertListAsync(inventoryDLs);
+            var inventoryDls = await _inventoryRepository.InsertAsync(inventoryDLs);
+            
+            var retVal = new List<Models.Inventory>();
+            foreach (var inv in inventoryDls)
+                retVal.Add(new Models.Inventory()
+                {
+                    InventoryId = inv.InventoryId,
+                    ItemId = inv.ItemId,
+                    Time = inv.Created,
+                    Export = inv.Export,
+                    Quantity = inv.Quantity,
+                    Monies = inv.Value
+                });
+            
             return retVal;
         }
 
-        public async Task<IEnumerable<Models.Inventory>> GetListAsync()
+        public Task DeleteAsync(IEnumerable<Models.Inventory> type)
         {
-            var inventoryDls = await _inventoryRepository.GetListAsync();
+            throw new NotImplementedException();
+        }
 
-            var retVal = new List<Models.Inventory>();
-            foreach (var inventory in inventoryDls)
-                retVal.Add(new Models.Inventory()
-                {
-                    InventoryId = inventory.InventoryId,
-                    ItemId = inventory.ItemId,
-                    Created = inventory.Created,
-                    Export = inventory.Export,
-                    Quantity = inventory.Quantity,
-                    Value = inventory.Value
-                });
-
-            return retVal;
+        public Task UpdateAsync(IEnumerable<Models.Inventory> type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,43 +14,25 @@ namespace DataLogic.List
     public class InventoryDL : Models.InventoryDL, IInventoryRepository
     {
         public async Task<IEnumerable<Models.InventoryDL>> ListAsync()
+            => ListStore.inventory;
+
+        public async Task<IEnumerable<Models.InventoryDL>> GetByIdAsync(Guid id)
+            => ListStore.inventory.Where(x => x.InventoryId == id);
+
+        public async Task<IEnumerable<Models.InventoryDL>> InsertAsync(IEnumerable<Models.InventoryDL> type)
+        {
+            ListStore.inventory.AddRange(type);
+            return type;
+        }
+
+        public async Task DeleteAsync(IEnumerable<Models.InventoryDL> type)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Models.InventoryDL> GetByIdAsync(Guid id)
-        {
-            return ListStore.inventory.FirstOrDefault(x => x.InventoryId == id);
-        }
-
-        public async Task<Guid> InsertAsync(Models.InventoryDL type)
-        {
-            type.InventoryId = Guid.NewGuid();
-            ListStore.inventory.Add(type);
-            return type.InventoryId;
-        }
-
-        public async Task DeleteAsync(Models.InventoryDL type)
+        public async Task UpdateAsync(IEnumerable<Models.InventoryDL> type)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task UpdateAsync(Models.InventoryDL type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Guid> InsertListAsync(IEnumerable<Models.InventoryDL> types)
-        {
-            ListStore.inventory.AddRange(types);
-
-            //They all have the same ID, so can just return the first
-            return types.First().InventoryId;
-        }
-
-        public async Task<IEnumerable<Models.InventoryDL>> GetListAsync()
-        {
-            return ListStore.inventory;
         }
     }
 }

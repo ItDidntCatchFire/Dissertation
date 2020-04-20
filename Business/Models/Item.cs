@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Business.Models
 {
@@ -11,16 +12,41 @@ namespace Business.Models
         public decimal BuyPrice { get; set; }
         public decimal SellPrice { get; set; }
 
-        public bool IsValid()
+        public Item()
         {
-            if (ItemId.ToString() != "")
-                if (Name != "")
-                    if (Description != "")
-                        if (ShelfLife != 0)
-                            if (BuyPrice != 0)
-                                if (SellPrice != 0)
-                                    return true;
-            return false;
+            
+        }
+        
+        public Item(Item item)
+        {
+            ItemId = item.ItemId;
+            Name = item.Name;
+            Description = item.Description;
+            ShelfLife = item.ShelfLife;
+            BuyPrice = item.BuyPrice;
+            SellPrice = item.SellPrice;
+        }
+        
+        public IEnumerable<string> Validate()
+        {
+            var invalidReasons = new List<string>();
+
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrWhiteSpace(Name))
+                invalidReasons.Add("Name missing");
+            
+            if (String.IsNullOrEmpty(Description) || String.IsNullOrWhiteSpace(Description))
+                invalidReasons.Add("Description missing");
+            
+            if (ShelfLife <= -1)
+                invalidReasons.Add("ShelfLife negative");
+            
+            if (BuyPrice <= -1)
+                invalidReasons.Add("BuyPrice negative");
+            
+            if (SellPrice <= -1)
+                invalidReasons.Add("SellPrice negative");
+            
+            return invalidReasons;
         }
     }
 }

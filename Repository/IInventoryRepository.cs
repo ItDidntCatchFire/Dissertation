@@ -4,10 +4,8 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public interface IInventoryRepository : IRepository<DataLogic.Models.InventoryDL, Guid>
+    public interface IInventoryRepository : IRepository<IEnumerable<DataLogic.Models.InventoryDL>, Guid>
     {
-        Task<Guid> InsertListAsync(IEnumerable<DataLogic.Models.InventoryDL> types);
-
-        Task<IEnumerable<DataLogic.Models.InventoryDL>> GetListAsync();
+        Task<IEnumerable<DataLogic.Models.InventoryDL>> ListAsync();
     }
 }

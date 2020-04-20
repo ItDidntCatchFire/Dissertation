@@ -53,7 +53,7 @@ namespace DataLogic.DataBase
             return retVal;
         }
 
-        public async Task<Guid> InsertAsync(Models.ItemDL type)
+        public async Task<Models.ItemDL> InsertAsync(Models.ItemDL type)
         {
             using var c = new SqlConnection(DataFactory.DBConnectionString);
             c.Open();
@@ -70,7 +70,7 @@ namespace DataLogic.DataBase
                 )
             );
             await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-            return Guid.Parse(DataFactory.GetParameterFromName(cmd, nameof(ItemId)).Value.ToString());
+            return type;
         }
 
         public Task DeleteAsync(Models.ItemDL type)

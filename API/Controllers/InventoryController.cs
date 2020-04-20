@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,14 +36,19 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertInventoryAsync([FromBody] Business.Models.Inventory inventory)
+        public async Task<IActionResult> InsertInventoryAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
             try
             {
-                if (inventory.IsValid())
-                    return Ok(await _inventoryLogic.InsertAsync(inventory));
+                var validation = new Business.Validation.ValidationResult();
+                
+                foreach (var inventory in inventories)
+                    validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
 
-                return BadRequest();
+                if (validation.IsValid)
+                    return Ok(await _inventoryLogic.InsertAsync(inventories));
+
+                return BadRequest(validation.Reasons);
             }
             catch (Exception ex)
             {
@@ -56,11 +63,15 @@ namespace API.Controllers
         {
             try
             {
+                var validation = new Business.Validation.ValidationResult();
+                
                 foreach (var inventory in inventories)
-                    if (!inventory.IsValid())
-                        return BadRequest();
+                    validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
 
-                return Ok(await _inventoryLogic.InsertListAsync(inventories));
+                if (validation.IsValid)
+                    return Ok(await _inventoryLogic.InsertAsync(inventories));
+
+                return BadRequest(validation.Reasons);
             }
             catch (Exception ex)
             {
@@ -74,7 +85,20 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await _inventoryLogic.GetListAsync());
+                var retVal = new List<Business.Models.Inventory>();
+                
+                foreach (var inventory in await _inventoryLogic.ListAsync())
+                    retVal.Add(new Business.Models.Inventory()
+                    {
+                        InventoryId = inventory.InventoryId,
+                        ItemId = inventory.ItemId,
+                        Time = inventory.Time,
+                        Export = inventory.Export,
+                        Quantity = inventory.Quantity,
+                        Monies = inventory.Monies
+                    });
+
+                return Ok(retVal);
             }
             catch (Exception ex)
             {

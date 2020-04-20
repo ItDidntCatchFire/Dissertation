@@ -1,5 +1,6 @@
 ﻿@page "/Finances"
 @inject HttpClient Http
+@inject Task<string> getURLTask
 
 @if (inventories == null)
 {
@@ -10,6 +11,7 @@
 else
 {
     
+    @data
         <div class="container my-4">
         <!--Accordion wrapper-->
         <div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
@@ -24,7 +26,7 @@ else
                         <a data-toggle="collapse" data-parent="#accordionEx24" href="#collapse@(nameGroup.Key)" aria-expanded="true" aria-controls="collapse@(nameGroup.Key)">
                             <h5 class="mt-1 mb-0">
                                 <span>@nameGroup.Key</span>
-                                <span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => x.Value).ToString("0.00")</span>
+                                <span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => x.Monies).ToString("0.00")</span>
                                 <i class="fas fa-angle-down rotate-icon"></i>
                             </h5>
                         </a>
@@ -66,7 +68,7 @@ else
                                             <td>@inventory.ItemId</td>
                                             <td>@(inventory.Export ? "Yes" : "No")</td>
                                             <td>@inventory.Quantity</td>
-                                            <td>£@inventory.Value.ToString("0.00")</td>
+                                            <td>£@inventory.Monies.ToString("0.00")</td>
                                             <td>
                                                 <a>
                                                     <i class="fas fa-info mx-1" data-toggle="tooltip" data-placement="top"
@@ -99,12 +101,13 @@ else
 }
 
 @code {
-    private List<Business.Models.Inventory> inventories;
+    private IEnumerable<Business.Models.Inventory> inventories;
     private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
+    private string data;
     
     protected override async Task OnInitializedAsync()
     {
-        inventories = await Http.GetJsonAsync<List<Business.Models.Inventory>>("https://192.168.0.103:5002/api/Inventory/List");
+        inventories = await Http.GetJsonAsync<IEnumerable<Business.Models.Inventory>>($"{await getURLTask}api/Inventory/List");
 
         query = from inventory in inventories
             group inventory by inventory.InventoryId
