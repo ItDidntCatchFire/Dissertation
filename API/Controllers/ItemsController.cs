@@ -34,6 +34,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
         public async Task<IActionResult> InsertItem([FromBody] Business.Models.Item item)
         {
             try
@@ -55,6 +56,7 @@ namespace API.Controllers
         }
         
         [HttpPost("Update")]
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
         public async Task<IActionResult> UpdateItem([FromBody] Business.Models.Item item)
         {
             try
@@ -77,6 +79,7 @@ namespace API.Controllers
         }
         
         [HttpGet("List")]
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
         public async Task<IActionResult> ItemsGetAll()
         {
             try

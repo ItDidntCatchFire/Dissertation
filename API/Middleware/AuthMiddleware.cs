@@ -18,7 +18,7 @@ namespace API.Middleware
 
         public async Task InvokeAsync(HttpContext context, IUserRepository _userRepository)
         {
-            if (context.Request.Headers.TryGetValue("ApiKey", out var _id))
+            if (context.Request.Headers.TryGetValue("ID", out var _id))
             {
                 if (Guid.TryParse(_id, out var Id))
                 {
