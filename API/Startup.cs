@@ -47,7 +47,6 @@ namespace API
                 options.EnableEndpointRouting = false;
                 options.Filters.Add(new Filters.AuthFilter());
             });
-
             //services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 

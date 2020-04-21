@@ -3,10 +3,8 @@
 @inject IJSRuntime JSRuntime;
 @inject HttpClient _HttpClient;
 @inject Task<string> getURLTask
-
+@attribute [Authorize]
 <h1>Items</h1>
-
-
 
 @if (items == null)
 {
@@ -108,7 +106,9 @@ else
     {
         _action = () => { message = "Written"; };
         item = new Business.Models.Item();
-        items = await _HttpClient.GetJsonAsync<List<Business.Models.Item>>($"{await getURLTask}api/Items/List");
+        var response = await Utils.GetAsync($"{await getURLTask}api/Items/List");
+        if (response.IsSuccessStatusCode)
+            items = JsonConvert.DeserializeObject<List<Business.Models.Item>>(await response.Content.ReadAsStringAsync());
     }
 
     private async Task Add()
