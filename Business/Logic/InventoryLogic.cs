@@ -25,10 +25,10 @@ namespace Business.Logic
                     {
                         InventoryId = inventoryDL.InventoryId,
                         ItemId = inventoryDL.ItemId,
-                        Time = inventoryDL.Created,
+                        Time = inventoryDL.Time,
                         Export = inventoryDL.Export,
                         Quantity = inventoryDL.Quantity,
-                        Monies = inventoryDL.Value
+                        Monies = inventoryDL.Monies
                     });
 
             return retVal;
@@ -45,10 +45,10 @@ namespace Business.Logic
                 {
                     InventoryId = inv.InventoryId,
                     ItemId = inv.ItemId,
-                    Time = inv.Created,
+                    Time = inv.Time,
                     Export = inv.Export,
                     Quantity = inv.Quantity,
-                    Monies = inv.Value
+                    Monies = inv.Monies
                 });
             }
 
@@ -65,10 +65,10 @@ namespace Business.Logic
                 {
                     InventoryId = invId,
                     ItemId = inven.ItemId,
-                    Created = inven.Time,
+                    Time = inven.Time,
                     Export = inven.Export,
                     Quantity = inven.Quantity,
-                    Value = inven.Monies
+                    Monies = inven.Monies
                 });
 
             var inventoryDls = await _inventoryRepository.InsertAsync(inventoryDLs);
@@ -79,10 +79,10 @@ namespace Business.Logic
                 {
                     InventoryId = inv.InventoryId,
                     ItemId = inv.ItemId,
-                    Time = inv.Created,
+                    Time = inv.Time,
                     Export = inv.Export,
                     Quantity = inv.Quantity,
-                    Monies = inv.Value
+                    Monies = inv.Monies
                 });
             
             return retVal;

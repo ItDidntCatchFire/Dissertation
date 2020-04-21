@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\DataLogic\DataLogic.csproj" />
+    <ProjectReference Include="..\Export\Export.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 

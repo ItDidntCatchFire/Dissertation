@@ -1,0 +1,32 @@
+﻿@page "/Export"
+@using Newtonsoft.Json
+@using System.IO
+@using System.Text
+@inject Task<string> getURLTask
+@inject IJSRuntime JSRuntime;
+@attribute [Authorize]
+
+<h1>Export</h1>
+<p>Inventory</p>
+<button class="btn btn-primary" @onclick="@(() => { Download("api/Inventory/ExportJSON", $"Inventory-{DateTime.Now:MM/dd/yyyy HH:mm:ss}.json"); })">Export JSON</button>
+<button class="btn btn-primary" @onclick="@(() => { Download("api/Inventory/ExportXML", $"Inventory-{DateTime.Now:MM/dd/yyyy HH:mm:ss}.xml"); })">Export XML</button>
+<p>Items</p>
+<button class="btn btn-primary" @onclick="@(() => { Download("api/Items/ExportJSON", $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}.json"); })">Export JSON</button>
+<button class="btn btn-primary" @onclick="@(() => { Download("api/Items/ExportXML", $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}.xml")); })">Export XML</button>
+
+
+
+@code {
+    private async void Download(string path, string name)
+    {
+        var response =  await Utils.GetAsync((await getURLTask) + path);
+        if (response.IsSuccessStatusCode)
+        {
+            var buffer = Encoding.UTF8.GetBytes(await response.Content.ReadAsStringAsync());
+            JSRuntime.InvokeAsync<object>(
+            "saveAsFile",
+                name,
+               Convert.ToBase64String(buffer));    
+        }
+    }
+}
