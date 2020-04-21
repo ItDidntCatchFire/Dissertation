@@ -1,4 +1,3 @@
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,11 +15,10 @@ namespace WebApplication
             {
                 identity = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Sid, Utils.UserId.ToString()),
-                    new Claim(ClaimTypes.Name, DateTime.Now.ToString()),
-                }, "Fake authentication type");    
+                    new Claim(ClaimTypes.Sid, Utils.UserId.ToString())
+                }, "MyAuthType");    
             }
-
+            
             var user = new ClaimsPrincipal(identity);
 
             return Task.FromResult(new AuthenticationState(user));

@@ -16,7 +16,7 @@ namespace WebApplication
                 return await httpClient.GetJsonAsync<string>("ip.json")
                     .ConfigureAwait(false);
             });
-            
+
             services.AddAuthorizationCore();
             services.AddScoped<CustomAuthStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
