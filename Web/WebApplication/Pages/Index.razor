@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using Business.Models
+@using WebApplication.Components
 @using Newtonsoft.Json
 @inject NavigationManager NavigationManager
 @inject HttpClient _HttpClient;
+@attribute [Authorize]
 
 <form action="#" @onsubmit="Scan">
     Guid to Scan

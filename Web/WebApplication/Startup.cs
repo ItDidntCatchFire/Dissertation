@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,10 @@ namespace WebApplication
                 return await httpClient.GetJsonAsync<string>("ip.json")
                     .ConfigureAwait(false);
             });
+
+            services.AddAuthorizationCore();
+            services.AddScoped<CustomAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
         }
 
         public void Configure(IComponentsApplicationBuilder app)

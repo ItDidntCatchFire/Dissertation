@@ -1,6 +1,7 @@
 ﻿@page "/Finances"
 @inject HttpClient Http
 @inject Task<string> getURLTask
+@attribute [Authorize]
 
 @if (inventories == null)
 {
@@ -11,8 +12,7 @@
 else
 {
     
-    @data
-        <div class="container my-4">
+    <div class="container my-4">
         <!--Accordion wrapper-->
         <div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
             @foreach (var nameGroup in query)
@@ -103,8 +103,7 @@ else
 @code {
     private IEnumerable<Business.Models.Inventory> inventories;
     private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
-    private string data;
-    
+
     protected override async Task OnInitializedAsync()
     {
         inventories = await Http.GetJsonAsync<IEnumerable<Business.Models.Inventory>>($"{await getURLTask}api/Inventory/List");
