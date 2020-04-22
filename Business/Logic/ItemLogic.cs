@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Business.Logic
@@ -89,6 +91,36 @@ namespace Business.Logic
             };
 
             await _itemRepository.UpdateAsync(itemDL);
+        }
+        
+        public async Task<List<Models.Item>> InsertListAsync(IEnumerable<Models.Item> type)
+        {
+            var itemDLs = new List<DataLogic.Models.ItemDL>();
+            foreach (var item in type)
+                itemDLs.Add(new DataLogic.Models.ItemDL()
+                {
+                    ItemId = item.ItemId == Guid.Empty ? Guid.NewGuid() : item.ItemId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    ShelfLife = item.ShelfLife,
+                    BuyPrice = item.BuyPrice,
+                    SellPrice = item.SellPrice
+                });
+            
+            itemDLs = (await _itemRepository.InsertListAsync(itemDLs)).ToList();
+
+            var retVal = new List<Models.Item>();
+            foreach (var item in itemDLs)
+                retVal.Add(new Models.Item()
+                {
+                    ItemId = item.ItemId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    ShelfLife = item.ShelfLife,
+                    BuyPrice = item.BuyPrice,
+                    SellPrice = item.SellPrice
+                });
+            return retVal;
         }
     }
 }

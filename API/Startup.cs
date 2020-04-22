@@ -7,6 +7,17 @@ using Microsoft.Extensions.Hosting;
 
 namespace API
 {
+    public enum eExport
+    {
+        JSON,
+        XML
+    }
+    
+    public enum eImport
+    {
+        JSON
+    }
+    
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -43,12 +54,22 @@ namespace API
             });
             services.AddScoped<Export.JsonExport>();
             services.AddScoped<Export.XMLExport>();
-            services.AddTransient<Func<Export.ExportEnum, Export.IExport>>(serviceProvider => key =>
+            services.AddTransient<Func<eExport, Export.IExport>>(serviceProvider => key =>
             {
                 return key switch
                 {
-                    Export.ExportEnum.JSON => serviceProvider.GetService<Export.JsonExport>(),
-                    Export.ExportEnum.XML => serviceProvider.GetService<Export.XMLExport>(),
+                    eExport.JSON => serviceProvider.GetService<Export.JsonExport>(),
+                    eExport.XML => serviceProvider.GetService<Export.XMLExport>(),
+                    _ => null
+                };
+            });
+            
+            services.AddScoped<Import.JsonImport>();
+            services.AddTransient<Func<eImport, Import.IImport>>(serviceProvider => key =>
+            {
+                return key switch
+                {
+                    eImport.JSON => serviceProvider.GetService<Import.JsonImport>(),
                     _ => null
                 };
             });

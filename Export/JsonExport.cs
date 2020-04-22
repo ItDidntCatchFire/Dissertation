@@ -9,7 +9,7 @@ namespace Export
         public string ContentType => "application/json";
         public string Extenstion => ".json";
 
-        public MemoryStream Write<T>(T obj)
+        public MemoryStream Convert<T>(T obj)
         {
             var json = JsonConvert.SerializeObject(obj);
             var buffer = Encoding.UTF8.GetBytes(json);

@@ -63,7 +63,7 @@ namespace Business.Logic
             foreach (var inven in inventory)
                 inventoryDLs.Add(new DataLogic.Models.InventoryDL()
                 {
-                    InventoryId = invId,
+                    InventoryId = inven.InventoryId == Guid.Empty ? invId : inven.InventoryId,
                     ItemId = inven.ItemId,
                     Time = inven.Time,
                     Export = inven.Export,
