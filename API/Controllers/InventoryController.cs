@@ -1,23 +1,29 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Export;
+using Import;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
+    [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
     public class InventoryController : Controller
     {
+        private readonly Func<eExport, IExport> _export;
+        private readonly Func<eImport, IImport> _import;
         private readonly Business.Logic.InventoryLogic _inventoryLogic;
-        private readonly Func<Export.ExportEnum,Export.IExport> _export;
-        
-        public InventoryController(Business.Logic.InventoryLogic inventoryLogic, Func<Export.ExportEnum,Export.IExport>  servicesResolver)
+
+        public InventoryController(Business.Logic.InventoryLogic inventoryLogic,
+            Func<eExport, IExport> exportResolver,
+            Func<eImport, IImport> importResolver)
         {
             _inventoryLogic = inventoryLogic;
-            _export = servicesResolver;
+            _export = exportResolver;
+            _import = importResolver;
         }
 
         [HttpGet("{inventoryId}")]
@@ -43,7 +49,7 @@ namespace API.Controllers
             try
             {
                 var validation = new Business.Validation.ValidationResult();
-                
+
                 foreach (var inventory in inventories)
                     validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
 
@@ -66,7 +72,7 @@ namespace API.Controllers
             try
             {
                 var validation = new Business.Validation.ValidationResult();
-                
+
                 foreach (var inventory in inventories)
                     validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
 
@@ -97,20 +103,48 @@ namespace API.Controllers
         }
 
         private async Task<IEnumerable<Business.Models.Inventory>> getAll()
-            => (await _inventoryLogic.ListAsync());
+        {
+            return await _inventoryLogic.ListAsync();
+        }
 
         [HttpGet("Export{type}")]
-        public async Task<IActionResult> SaveFile([FromRoute]Export.ExportEnum type)
+        public async Task<IActionResult> SaveFile([FromRoute]eExport type)
         {
-            var inventories = await getAll();
-
-            var service = _export(type);
-            
-            var result = new FileStreamResult(service.Write(inventories), service.ContentType)
+            try
             {
-                FileDownloadName = $"Inventory-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
-            };
-            return result;
+                var inventories = (await getAll()).ToList();
+
+                var exporter = _export(type);
+
+                var result = new FileStreamResult(exporter.Convert(inventories), exporter.ContentType)
+                {
+                    FileDownloadName = $"Inventory-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{exporter.Extenstion}"
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+           
+        }
+
+        [HttpPost("Import")]
+        public async Task<IActionResult> Import([FromBody] string data, [FromRoute] eImport type)
+        {
+            try
+            {
+                var importer = _import(type);
+                var inventories = importer.Read<List<Business.Models.Inventory>>(data);
+                await _inventoryLogic.InsertAsync(inventories);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
         }
     }
 }

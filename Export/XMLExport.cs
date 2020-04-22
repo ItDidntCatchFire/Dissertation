@@ -8,7 +8,7 @@ namespace Export
     {
         public string ContentType => "text/xml";
         public string Extenstion => ".xml";
-        public MemoryStream Write<T>(T obj)
+        public MemoryStream Convert<T>(T obj)
         {
             var s = new XmlSerializer(typeof(T));
             var sr = new System.IO.StringWriter();

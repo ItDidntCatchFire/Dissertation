@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Export;
+using Import;
 
 namespace API.Controllers
 {
@@ -12,12 +14,16 @@ namespace API.Controllers
     public class ItemsController : Controller
     {
         private readonly Business.Logic.ItemLogic _itemLogic;
-        private readonly Func<Export.ExportEnum,Export.IExport> _export;
+        private readonly Func<eExport, IExport> _export;
+        private readonly Func<eImport, IImport> _import;
         
-        public ItemsController(Business.Logic.ItemLogic itemLogic, Func<Export.ExportEnum,Export.IExport>  servicesResolver)
+        public ItemsController(Business.Logic.ItemLogic itemLogic, 
+            Func<eExport,IExport>  exportResolver,
+            Func<eImport,IImport>  importResolver)
         {
             _itemLogic = itemLogic;
-            _export = servicesResolver;
+            _export = exportResolver;
+            _import = importResolver;
         }
 
         [HttpGet("{itemId}")]
@@ -100,18 +106,44 @@ namespace API.Controllers
         private async Task<List<Business.Models.Item>> getAll()
             => (await _itemLogic.ListAsync()).ToList();
         
-        //[Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
         [HttpGet("Export{type}")]
-        public async Task<IActionResult> SaveFile([FromRoute]Export.ExportEnum type)
+        public async Task<IActionResult> SaveFile([FromRoute]eExport type)
         {
-            var items = await getAll();
-
-            var service = _export(type);
-            var result = new FileStreamResult(service.Write(items), service.ContentType)
+            try
             {
-                FileDownloadName = $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
-            };
-            return result;
+                var items = await getAll();
+
+                var service = _export(type);
+                var result = new FileStreamResult(service.Convert(items), service.ContentType)
+                {
+                    FileDownloadName = $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+        
+        [HttpPost("Import")]
+        public async Task<IActionResult> Import([FromBody] string data, [FromRoute] eImport type)
+        {
+            try
+            {
+                var importer = _import(type);
+                var items = importer.Read<List<Business.Models.Item>>(data);
+                await _itemLogic.InsertListAsync(items);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+            
         }
     }
 }

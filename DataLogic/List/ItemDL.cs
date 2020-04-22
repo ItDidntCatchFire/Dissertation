@@ -39,5 +39,11 @@ namespace DataLogic.List
             var index =  ListStore.items.FindIndex(x => x.ItemId == type.ItemId);
             ListStore.items[index] = type;
         }
+        
+        public async Task<IEnumerable<Models.ItemDL>> InsertListAsync(IEnumerable<Models.ItemDL> types)
+        {
+            ListStore.items.AddRange(types);
+            return types;
+        }
     }
 }
