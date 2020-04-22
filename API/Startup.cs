@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,13 +41,26 @@ namespace API
                             .AllowAnyHeader();
                     });
             });
-
+            services.AddScoped<Export.JsonExport>();
+            services.AddScoped<Export.XMLExport>();
+            services.AddTransient<Func<Export.ExportEnum, Export.IExport>>(serviceProvider => key =>
+            {
+                return key switch
+                {
+                    Export.ExportEnum.JSON => serviceProvider.GetService<Export.JsonExport>(),
+                    Export.ExportEnum.XML => serviceProvider.GetService<Export.XMLExport>(),
+                    _ => null
+                };
+            });
+            
             services.AddMvc(options =>
             {
                 options.AllowEmptyInputInBodyModelBinding = true;
                 options.EnableEndpointRouting = false;
                 options.Filters.Add(new Filters.AuthFilter());
             });
+            
+            
             //services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 

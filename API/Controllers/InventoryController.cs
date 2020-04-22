@@ -8,14 +8,16 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
     public class InventoryController : Controller
     {
         private readonly Business.Logic.InventoryLogic _inventoryLogic;
-
-        public InventoryController(Business.Logic.InventoryLogic inventoryLogic)
+        private readonly Func<Export.ExportEnum,Export.IExport> _export;
+        
+        public InventoryController(Business.Logic.InventoryLogic inventoryLogic, Func<Export.ExportEnum,Export.IExport>  servicesResolver)
         {
             _inventoryLogic = inventoryLogic;
+            _export = servicesResolver;
         }
 
         [HttpGet("{inventoryId}")]
@@ -85,26 +87,30 @@ namespace API.Controllers
         {
             try
             {
-                var retVal = new List<Business.Models.Inventory>();
-                
-                foreach (var inventory in await _inventoryLogic.ListAsync())
-                    retVal.Add(new Business.Models.Inventory()
-                    {
-                        InventoryId = inventory.InventoryId,
-                        ItemId = inventory.ItemId,
-                        Time = inventory.Time,
-                        Export = inventory.Export,
-                        Quantity = inventory.Quantity,
-                        Monies = inventory.Monies
-                    });
-
-                return Ok(retVal);
+                return Ok(await getAll());
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500, "Failure");
             }
+        }
+
+        private async Task<IEnumerable<Business.Models.Inventory>> getAll()
+            => (await _inventoryLogic.ListAsync());
+
+        [HttpGet("Export{type}")]
+        public async Task<IActionResult> SaveFile([FromRoute]Export.ExportEnum type)
+        {
+            var inventories = await getAll();
+
+            var service = _export(type);
+            
+            var result = new FileStreamResult(service.Write(inventories), service.ContentType)
+            {
+                FileDownloadName = $"Inventory-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
+            };
+            return result;
         }
     }
 }
