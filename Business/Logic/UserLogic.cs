@@ -1,14 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using Business.Models;
 
 namespace Business.Logic
 {
     public class UserLogic : ILogic<Models.User, Guid>
     {
-        private readonly Repository.IUserRepository _userRepository;
+        private readonly Repository.IUserRepository<DataLogic.Models.UserDL, Guid> _userRepository;
         
-        public UserLogic(Repository.IUserRepository userRepository)
+        public UserLogic(Repository.IUserRepository<DataLogic.Models.UserDL, Guid> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -20,23 +19,17 @@ namespace Business.Logic
             return new Models.User()
             {
                 UserId = type.UserId,
-                Role = (User.Roles) type.Role
+                Role = (Models.User.Roles) type.Role
             };
         }
 
         public Task<Models.User> InsertAsync(Models.User type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         public Task DeleteAsync(Models.User type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         public Task UpdateAsync(Models.User type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

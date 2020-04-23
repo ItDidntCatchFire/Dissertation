@@ -37,8 +37,7 @@
                Convert.ToBase64String(buffer));    
         }
     }
-
-    private static string data = "";
+    
     private async void UploadFile(string type)
         => await JSRuntime.InvokeAsync<bool>("readUploadedFileAsText", "fileUpload");
 

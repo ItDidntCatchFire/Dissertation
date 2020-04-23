@@ -1,9 +1,8 @@
 ﻿@page "/Items"
-@using Newtonsoft.Json
 @inject IJSRuntime JSRuntime;
-@inject HttpClient _HttpClient;
 @inject Task<string> getURLTask
 @attribute [Authorize]
+
 <h1>Items</h1>
 
 @if (items == null)

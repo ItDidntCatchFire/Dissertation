@@ -8,9 +8,14 @@ using Repository;
 
 namespace DataLogic.DataBase
 {
-    public class ItemDL : Models.ItemDL, IItemRepository
+    public class ItemDL : Models.ItemDL, IItemRepository<Models.ItemDL, Guid>
     {
         public Task<IEnumerable<Models.ItemDL>> ListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Models.ItemDL>> InsertListAsync(IEnumerable<Models.ItemDL> types)
         {
             throw new NotImplementedException();
         }

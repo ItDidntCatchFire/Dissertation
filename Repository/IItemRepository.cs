@@ -1,12 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Repository
 {
-    public interface IItemRepository : IRepository<DataLogic.Models.ItemDL, Guid>
+    public interface IItemRepository<T, U> : IRepository<T, U>, IList<T> 
+        where T : class 
     {
-        Task<IEnumerable<DataLogic.Models.ItemDL>> ListAsync();
-        Task<IEnumerable<DataLogic.Models.ItemDL>> InsertListAsync(IEnumerable<DataLogic.Models.ItemDL> types);
+        Task<IEnumerable<T>> ListAsync();
+        Task<IEnumerable<T>> InsertListAsync(IEnumerable<T> types);
     }
 }

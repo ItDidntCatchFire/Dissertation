@@ -33,9 +33,9 @@ namespace API
         {
             services.AddControllers();
 
-            services.AddSingleton<Repository.IItemRepository, DataLogic.List.ItemDL>();
-            services.AddSingleton<Repository.IInventoryRepository, DataLogic.List.InventoryDL>();
-            services.AddSingleton<Repository.IUserRepository, DataLogic.List.UserDL>();
+            services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.List.ItemDL>();
+            services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.InventoryDL>();
+            services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.List.UserDL>();
 
             services.AddSingleton<Business.Logic.ItemLogic>();
             services.AddSingleton<Business.Logic.InventoryLogic>();

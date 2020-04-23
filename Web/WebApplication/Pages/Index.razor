@@ -1,9 +1,6 @@
 ﻿@page "/"
-@using Business.Models
 @using WebApplication.Components
-@using Newtonsoft.Json
 @inject NavigationManager NavigationManager
-@inject HttpClient _HttpClient;
 @attribute [Authorize]
 
 <form action="#" @onsubmit="Scan">
@@ -11,20 +8,20 @@
     <input type="text" name="txt"/>
 </form>
 
-<button class="btn btn-primary" disabled="@(!(Items.Count > 0))" @onclick="Checkout">Checkout</button>
+<button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
 <Cart @ref="child" NFC="false" callBack="callback"/>
 
 
 @code
 {
-    private List<Cart.Item> Items = new List<Cart.Item>();
+    private List<Cart.Item> items = new List<Cart.Item>();
 
     private Cart child;
 
-    public void callback(List<Cart.Item> items)
+    public void callback(List<Cart.Item> _items)
     {
-        Items = items;
+        items = _items;
         StateHasChanged();
     }
 
@@ -49,10 +46,9 @@
 
     private async void Checkout()
     {
-        var inventory = new List<Inventory>();
-        foreach (var item in Items)
-        {
-            inventory.Add(new Inventory()
+        var inventory = new List<Business.Models.Inventory>();
+        foreach (var item in items)
+            inventory.Add(new Business.Models.Inventory()
             {
                 ItemId = item.ItemId,
                 Time = DateTime.Now,
@@ -60,14 +56,13 @@
                 Monies = item.SellPrice,
                 Export = true
             });
-        }
-        
-        var response = await Utils.PostAsync("api/Inventory/List", Items);
+
+        var response = await Utils.PostAsync("api/Inventory/List", items);
         if (response.IsSuccessStatusCode)
         {
             InvId = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
         
-            Items = new List<Cart.Item>();
+            items = new List<Cart.Item>();
             StateHasChanged();
             child.Clear();    
         }

@@ -11,7 +11,9 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemsController : Controller
+    public class ItemsController : Controller, 
+        IController<Business.Models.Item, Guid>,
+        IDataTransfer
     {
         private readonly Business.Logic.ItemLogic _itemLogic;
         private readonly Func<eExport, IExport> _export;
@@ -26,13 +28,13 @@ namespace API.Controllers
             _import = importResolver;
         }
 
-        [HttpGet("{itemId}")]
-        public async Task<IActionResult> GetItemByItemId([FromRoute] Guid itemId)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid Id)
         {
             try
             {
-                if (itemId != Guid.Empty)
-                    return Ok(await _itemLogic.GetByIdAsync(itemId));
+                if (Id != Guid.Empty)
+                    return Ok(await _itemLogic.GetByIdAsync(Id));
 
                 return BadRequest();
             }
@@ -42,10 +44,10 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
-
+        
         [HttpPost]
         [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
-        public async Task<IActionResult> InsertItem([FromBody] Business.Models.Item item)
+        public async Task<IActionResult> InsertAsync([FromBody] Business.Models.Item item)
         {
             try
             {
@@ -65,6 +67,61 @@ namespace API.Controllers
             }
         }
         
+        [HttpGet("List")]
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            try
+            {
+                return Ok(await getAll());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+        
+        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
+        [HttpGet("Export{type}")]
+        public async Task<IActionResult> SaveFile([FromRoute]eExport exportType)
+        {
+            try
+            {
+                var items = await getAll();
+
+                var service = _export(exportType);
+                var result = new FileStreamResult(service.Convert(items), service.ContentType)
+                {
+                    FileDownloadName = $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+        
+        [HttpPost("Import")]
+        public async Task<IActionResult> ReadFile([FromBody] string content, [FromRoute] eImport importType)
+        {
+            try
+            {
+                var importer = _import(importType);
+                var items = importer.Read<List<Business.Models.Item>>(content);
+                await _itemLogic.InsertListAsync(items);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+            
+        }
+
         [HttpPost("Update")]
         [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
         public async Task<IActionResult> UpdateItem([FromBody] Business.Models.Item item)
@@ -88,62 +145,7 @@ namespace API.Controllers
             }
         }
         
-        [HttpGet("List")]
-        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
-        public async Task<IActionResult> ItemsGetAll()
-        {
-            try
-            {
-                return Ok(await getAll());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "Failure");
-            }
-        }
-
         private async Task<List<Business.Models.Item>> getAll()
             => (await _itemLogic.ListAsync()).ToList();
-        
-        [Authorize(Roles=nameof(Business.Models.User.Roles.Owner))]
-        [HttpGet("Export{type}")]
-        public async Task<IActionResult> SaveFile([FromRoute]eExport type)
-        {
-            try
-            {
-                var items = await getAll();
-
-                var service = _export(type);
-                var result = new FileStreamResult(service.Convert(items), service.ContentType)
-                {
-                    FileDownloadName = $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}{service.Extenstion}"
-                };
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "Failure");
-            }
-        }
-        
-        [HttpPost("Import")]
-        public async Task<IActionResult> Import([FromBody] string data, [FromRoute] eImport type)
-        {
-            try
-            {
-                var importer = _import(type);
-                var items = importer.Read<List<Business.Models.Item>>(data);
-                await _itemLogic.InsertListAsync(items);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "Failure");
-            }
-            
-        }
     }
 }

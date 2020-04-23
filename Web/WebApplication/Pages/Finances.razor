@@ -1,5 +1,4 @@
 ﻿@page "/Finances"
-@inject HttpClient Http
 @inject Task<string> getURLTask
 @attribute [Authorize]
 
@@ -106,12 +105,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        inventories = await Http.GetJsonAsync<IEnumerable<Business.Models.Inventory>>($"{await getURLTask}api/Inventory/List");
+        var response = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
+        if (response.IsSuccessStatusCode)
+        {
 
-        query = from inventory in inventories
-            group inventory by inventory.InventoryId
-            into newGroup
-            orderby newGroup.Key
-            select newGroup;
+            inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await response.Content.ReadAsStringAsync()); 
+            query = from inventory in inventories
+                group inventory by inventory.InventoryId
+                into newGroup
+                orderby newGroup.Key
+                select newGroup;
+        }
     }
 }

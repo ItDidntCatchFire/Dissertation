@@ -11,7 +11,6 @@ cd ../API
 nohup dotnet run --urls "https://${IP}:${Port}" > /dev/null 2>&1 &
 sleep 5
 
-
 cd ../Tests
 host=$"https://${IP}:${Port}/api/"
 printf $"Host ${host}\n"
@@ -22,10 +21,6 @@ trap error SIGHUP
 
 function error()
 {
-	if [[ $local == 1 ]] 
-	 then
-		kill $PROC_ID
-	 fi
 	if [[ $Expected != $var ]]
     then
         printf "Expected\n\t"
@@ -37,7 +32,7 @@ function error()
 	exit 1
 }
 
-printf "Item\n"
+printf "Items\n"
 printf "\tInsert\n"
 printf "\t\t\tNo Authentiction\n"
 if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json') == 401 ]]

@@ -16,7 +16,7 @@ namespace API.Middleware
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, IUserRepository _userRepository)
+        public async Task InvokeAsync(HttpContext context, IUserRepository<DataLogic.Models.UserDL, Guid> _userRepository)
         {
             if (context.Request.Headers.TryGetValue("ID", out var _id))
             {
