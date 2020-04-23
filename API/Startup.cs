@@ -32,15 +32,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.List.ItemDL>();
-            services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.InventoryDL>();
-            services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.List.UserDL>();
-
-            services.AddSingleton<Business.Logic.ItemLogic>();
-            services.AddSingleton<Business.Logic.InventoryLogic>();
-            services.AddSingleton<Business.Logic.UserLogic>();
-
+            
+            //Fixes issues with CORS, it's okay as this is not public facing
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -52,6 +45,26 @@ namespace API
                             .AllowAnyHeader();
                     });
             });
+            
+            //Add the Auth filter so only Authorized people can use the endpoints
+            services.AddMvc(options =>
+            {
+                options.AllowEmptyInputInBodyModelBinding = true;
+                options.EnableEndpointRouting = false;
+                options.Filters.Add(new Filters.AuthFilter());
+            });
+            
+            //Storage
+            services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.List.ItemDL>();
+            services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.InventoryDL>();
+            services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.List.UserDL>();
+
+            //Logic
+            services.AddSingleton<Business.Logic.ItemLogic>();
+            services.AddSingleton<Business.Logic.InventoryLogic>();
+            services.AddSingleton<Business.Logic.UserLogic>();
+
+            //Exporters
             services.AddScoped<Export.JsonExport>();
             services.AddScoped<Export.XMLExport>();
             services.AddTransient<Func<eExport, Export.IExport>>(serviceProvider => key =>
@@ -64,6 +77,7 @@ namespace API
                 };
             });
             
+            //Importers
             services.AddScoped<Import.JsonImport>();
             services.AddTransient<Func<eImport, Import.IImport>>(serviceProvider => key =>
             {
@@ -73,16 +87,6 @@ namespace API
                     _ => null
                 };
             });
-            
-            services.AddMvc(options =>
-            {
-                options.AllowEmptyInputInBodyModelBinding = true;
-                options.EnableEndpointRouting = false;
-                options.Filters.Add(new Filters.AuthFilter());
-            });
-            
-            
-            //services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

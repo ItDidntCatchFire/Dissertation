@@ -26,8 +26,8 @@ namespace API.Filters
             }
             catch
             {
-                context.HttpContext.Response.StatusCode = 401;
-                context.Result = new JsonResult("Unauthorized");
+                context.HttpContext.Response.StatusCode = 500;
+                context.Result = new JsonResult("Failure");
             }
         }
     }
