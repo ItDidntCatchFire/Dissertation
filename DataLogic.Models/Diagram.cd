@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataLogic.Models.InventoryDL">
+    <Position X="2.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAgAAABAAAAAAAAAAAAEAAgAAAAQA=</HashCode>
+      <FileName>InventoryDL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataLogic.Models.ItemDL">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAIQAgAAAAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemDL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataLogic.Models.UserDL">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserDL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

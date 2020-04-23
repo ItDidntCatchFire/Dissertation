@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Business.Logic.InventoryLogic">
+    <Position X="10" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAIAgAAAAAAAABIIA=</HashCode>
+      <FileName>Logic\InventoryLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Logic.ItemLogic">
+    <Position X="8.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgACAAAAAAAAAEAAAAAAAAAIAgAAAAAAAAAIIA=</HashCode>
+      <FileName>Logic\ItemLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Logic.UserLogic">
+    <Position X="6.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgCAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIIA=</HashCode>
+      <FileName>Logic\UserLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Models.Inventory">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAEAAAgAAABAAAAAAAAAAAAEAAgAAAAQA=</HashCode>
+      <FileName>Models\Inventory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Models.Item">
+    <Position X="3" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACgAIQAgAAAAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Item.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Models.User">
+    <Position X="1.25" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Business.Models.User.Roles" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\User.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Business.Validation.ValidationResult">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Validation\ValidationResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Business.Validation.Validator">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Validation\Validator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Business.Logic.ILogic&lt;T, U&gt;">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIIA=</HashCode>
+      <FileName>Logic\ILogic.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Business.Models.IModel">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
