@@ -1,8 +1,7 @@
-using System;
-
 namespace Repository
 {
-    public interface IUserRepository : IRepository<DataLogic.Models.UserDL, Guid>
+    public interface IUserRepository<T, U> : IRepository<T, U> 
+        where T : class 
     {
         
     }

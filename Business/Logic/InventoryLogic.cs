@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Business.Logic
 {
     public class InventoryLogic : ILogic<IEnumerable<Models.Inventory>, Guid>
     {
-        private readonly Repository.IInventoryRepository _inventoryRepository;
+        private readonly Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid> _inventoryRepository;
 
-        public InventoryLogic(Repository.IInventoryRepository inventoryRepository)
+        public InventoryLogic(Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid> inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
         }
@@ -55,20 +54,20 @@ namespace Business.Logic
             return inventories;
         }
 
-        public async Task<IEnumerable<Models.Inventory>> InsertAsync(IEnumerable<Models.Inventory> inventory)
+        public async Task<IEnumerable<Models.Inventory>> InsertAsync(IEnumerable<Models.Inventory> inventories)
         {
             var invId = Guid.NewGuid();
 
             var inventoryDLs = new List<DataLogic.Models.InventoryDL>();
-            foreach (var inven in inventory)
+            foreach (var inventory in inventories)
                 inventoryDLs.Add(new DataLogic.Models.InventoryDL()
                 {
-                    InventoryId = inven.InventoryId == Guid.Empty ? invId : inven.InventoryId,
-                    ItemId = inven.ItemId,
-                    Time = inven.Time,
-                    Export = inven.Export,
-                    Quantity = inven.Quantity,
-                    Monies = inven.Monies
+                    InventoryId = inventory.InventoryId == Guid.Empty ? invId : inventory.InventoryId,
+                    ItemId = inventory.ItemId,
+                    Time = inventory.Time,
+                    Export = inventory.Export,
+                    Quantity = inventory.Quantity,
+                    Monies = inventory.Monies
                 });
 
             var inventoryDls = await _inventoryRepository.InsertAsync(inventoryDLs);
@@ -89,13 +88,9 @@ namespace Business.Logic
         }
 
         public Task DeleteAsync(IEnumerable<Models.Inventory> type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         public Task UpdateAsync(IEnumerable<Models.Inventory> type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

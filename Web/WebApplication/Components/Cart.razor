@@ -1,8 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime;
-@inject HttpClient _HttpClient;
 @inject Task<string> getURLTask;
 
-@if (@NFC && !@permission)
+@if (NFC && !permission)
 {
     <button @onclick="NFCPermission">
         Start Scanning
@@ -55,31 +54,31 @@ else
 
     public async void UpdateMessage(Guid id)
     {
-        
-        var _item = await _HttpClient.GetJsonAsync<Business.Models.Item>($"{await getURLTask}api/Items/" + id);
-
-        if (Items == null)
-            Items = new List<Item>();
-
-    //If we already have the item just increase the quantity otherwise add a new item
-        if (Items.FirstOrDefault(x => x.ItemId == id) != null)
+        var response = await Utils.GetAsync($"{await getURLTask}api/Items/{id}");
+        if (response.IsSuccessStatusCode)
         {
-            Items.First(x => x.ItemId == id).Quantity++;
-        }
-        else
-        {
-            var item = new Item()
+            var _item = JsonConvert.DeserializeObject<Business.Models.Item>(await response.Content.ReadAsStringAsync());
+
+            Items ??= new List<Item>();
+
+            //If we already have the item just increase the quantity otherwise add a new item
+            if (Items.FirstOrDefault(x => x.ItemId == id) != null)
+                Items.First(x => x.ItemId == id).Quantity++;
+            else
             {
-                ItemId = _item.ItemId,
-                Name = _item.Name,
-                Description = _item.Description,
-                BuyPrice = _item.BuyPrice,
-                SellPrice = _item.SellPrice,
-                ShelfLife = _item.ShelfLife,
-                Quantity = 1
-            };
+                var item = new Item
+                {
+                    ItemId = _item.ItemId,
+                    Name = _item.Name,
+                    Description = _item.Description,
+                    BuyPrice = _item.BuyPrice,
+                    SellPrice = _item.SellPrice,
+                    ShelfLife = _item.ShelfLife,
+                    Quantity = 1
+                };
 
-            Items.Add(item);
+                Items.Add(item);
+            }
         }
 
         StateHasChanged();

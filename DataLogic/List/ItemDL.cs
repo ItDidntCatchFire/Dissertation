@@ -11,7 +11,7 @@ namespace DataLogic.List
         public static List<Models.ItemDL> items = new List<Models.ItemDL>();
     }
 
-    public class ItemDL : Models.ItemDL, IItemRepository
+    public class ItemDL : Models.ItemDL, IItemRepository<Models.ItemDL, Guid>
     {
         public async Task<IEnumerable<Models.ItemDL>> ListAsync()
         {
@@ -23,27 +23,25 @@ namespace DataLogic.List
             return ListStore.items.FirstOrDefault(x => x.ItemId == id);
         }
 
-        public async Task<Models.ItemDL> InsertAsync(Models.ItemDL type)
+        public async Task<Models.ItemDL> InsertAsync(Models.ItemDL item)
         {
-            ListStore.items.Add(type);
-            return type;
+            ListStore.items.Add(item);
+            return item;
         }
 
         public Task DeleteAsync(Models.ItemDL type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
-        public async Task UpdateAsync(Models.ItemDL type)
+        public async Task UpdateAsync(Models.ItemDL item)
         {
-            var index =  ListStore.items.FindIndex(x => x.ItemId == type.ItemId);
-            ListStore.items[index] = type;
+            var index =  ListStore.items.FindIndex(x => x.ItemId == item.ItemId);
+            ListStore.items[index] = item;
         }
         
-        public async Task<IEnumerable<Models.ItemDL>> InsertListAsync(IEnumerable<Models.ItemDL> types)
+        public async Task<IEnumerable<Models.ItemDL>> InsertListAsync(IEnumerable<Models.ItemDL> items)
         {
-            ListStore.items.AddRange(types);
-            return types;
+            ListStore.items.AddRange(items);
+            return items;
         }
     }
 }

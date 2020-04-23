@@ -8,31 +8,27 @@ namespace DataLogic.List
 {
     internal static partial class ListStore
     {
-        public static List<Models.InventoryDL> inventory = new List<Models.InventoryDL>();
+        public static List<Models.InventoryDL> Inventory = new List<Models.InventoryDL>();
     }
 
-    public class InventoryDL : Models.InventoryDL, IInventoryRepository
+    public class InventoryDL : Models.InventoryDL, IInventoryRepository<Models.InventoryDL, Guid>
     {
         public async Task<IEnumerable<Models.InventoryDL>> ListAsync()
-            => ListStore.inventory;
+            => ListStore.Inventory;
 
         public async Task<IEnumerable<Models.InventoryDL>> GetByIdAsync(Guid id)
-            => ListStore.inventory.Where(x => x.InventoryId == id);
+            => ListStore.Inventory.Where(x => x.InventoryId == id);
 
-        public async Task<IEnumerable<Models.InventoryDL>> InsertAsync(IEnumerable<Models.InventoryDL> type)
+        public async Task<IEnumerable<Models.InventoryDL>> InsertAsync(IEnumerable<Models.InventoryDL> inventories)
         {
-            ListStore.inventory.AddRange(type);
-            return type;
+            ListStore.Inventory.AddRange(inventories);
+            return inventories;
         }
 
         public async Task DeleteAsync(IEnumerable<Models.InventoryDL> type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         public async Task UpdateAsync(IEnumerable<Models.InventoryDL> type)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

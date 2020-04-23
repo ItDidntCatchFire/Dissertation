@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Repository
 {
-    public interface IInventoryRepository : IRepository<IEnumerable<DataLogic.Models.InventoryDL>, Guid>
+    public interface IInventoryRepository<T, U> : IRepository<IEnumerable<T>, U>, IList<T> 
+        where T : class 
     {
-        Task<IEnumerable<DataLogic.Models.InventoryDL>> ListAsync();
+        Task<IEnumerable<T>> ListAsync();
     }
 }

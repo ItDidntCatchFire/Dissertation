@@ -10,8 +10,11 @@ using Import;
 namespace API.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
-    public class InventoryController : Controller
+    public class InventoryController : Controller,
+        IController<IEnumerable<Business.Models.Inventory>, Guid>,
+        IDataTransfer
     {
         private readonly Func<eExport, IExport> _export;
         private readonly Func<eImport, IImport> _import;
@@ -27,7 +30,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{inventoryId}")]
-        public async Task<IActionResult> GetInventoryByInventoryId([FromRoute] Guid inventoryId)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid inventoryId)
         {
             try
             {
@@ -44,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertInventoryAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
+        public async Task<IActionResult> InsertAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
             try
             {
@@ -64,32 +67,9 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
-
-        [HttpPost("List")]
-        public async Task<IActionResult> InsertInventoryListAsync(
-            [FromBody] IEnumerable<Business.Models.Inventory> inventories)
-        {
-            try
-            {
-                var validation = new Business.Validation.ValidationResult();
-
-                foreach (var inventory in inventories)
-                    validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
-
-                if (validation.IsValid)
-                    return Ok(await _inventoryLogic.InsertAsync(inventories));
-
-                return BadRequest(validation.Reasons);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "Failure");
-            }
-        }
-
+        
         [HttpGet("List")]
-        public async Task<IActionResult> InventoryGetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
@@ -102,19 +82,14 @@ namespace API.Controllers
             }
         }
 
-        private async Task<IEnumerable<Business.Models.Inventory>> getAll()
-        {
-            return await _inventoryLogic.ListAsync();
-        }
-
-        [HttpGet("Export{type}")]
-        public async Task<IActionResult> SaveFile([FromRoute]eExport type)
+        [HttpGet("Export")]
+        public async Task<IActionResult> SaveFile([FromRoute] eExport exportType)
         {
             try
             {
                 var inventories = (await getAll()).ToList();
 
-                var exporter = _export(type);
+                var exporter = _export(exportType);
 
                 var result = new FileStreamResult(exporter.Convert(inventories), exporter.ContentType)
                 {
@@ -127,16 +102,16 @@ namespace API.Controllers
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500, "Failure");
             }
-           
+
         }
 
         [HttpPost("Import")]
-        public async Task<IActionResult> Import([FromBody] string data, [FromRoute] eImport type)
+        public async Task<IActionResult> ReadFile([FromBody] string content, [FromRoute] eImport importType)
         {
             try
             {
-                var importer = _import(type);
-                var inventories = importer.Read<List<Business.Models.Inventory>>(data);
+                var importer = _import(importType);
+                var inventories = importer.Read<List<Business.Models.Inventory>>(content);
                 await _inventoryLogic.InsertAsync(inventories);
                 return Ok();
             }
@@ -146,5 +121,30 @@ namespace API.Controllers
                 return StatusCode(500, "Failure");
             }
         }
+        
+        [HttpPost("List")]
+        public async Task<IActionResult> InsertInventoryListAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
+        {
+            try
+            {
+                var validation = new Business.Validation.ValidationResult();
+
+                foreach (var inventory in inventories)
+                    validation.Reasons.AddRange(Business.Validation.Validator.ValidateModel(inventory).Reasons);
+
+                if (validation.IsValid)
+                    return Ok(await _inventoryLogic.InsertAsync(inventories));
+
+                return BadRequest(validation.Reasons);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+        
+        private async Task<IEnumerable<Business.Models.Inventory>> getAll()
+            => (await _inventoryLogic.ListAsync());
     }
 }
