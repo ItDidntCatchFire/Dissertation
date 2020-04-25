@@ -1,6 +1,9 @@
 using System;
+using System.IO;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -101,10 +104,22 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
-
-            //app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
+            
             app.UseCors("AllowAll");
+
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                {
+
+                    ctx.Response.StatusCode = 500;
+                    await ctx.Response.WriteAsync("Failure");
+                    
+                    //ctx.Response.Body = GenerateStreamFromString("Failure");
+                }
+            });
+            
             app.UseMvc();
         }
     }
