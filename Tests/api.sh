@@ -35,10 +35,10 @@ function error()
 printf "Items\n"
 printf "\tInsert\n"
 printf "\t\t\tNo Authentiction\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json') == 401 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json') == 500 ]]
 then 
 	 var=$(<results.txt)
-	 Expected='"Unauthorized"'
+	 Expected='"Failure"'
      if [[ $Expected != "$var" ]]
      then
          printf "Failed \n"
@@ -50,10 +50,10 @@ else
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'ID: '$Authentiction'h' -H 'Content-Type: application/json') == 401 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'ID: '$Authentiction'h' -H 'Content-Type: application/json') == 500 ]]
 then 
 	 var=$(<results.txt)
-	 Expected='"Unauthorized"'
+	 Expected='"Failure"'
      if [[ $Expected != "$var" ]]
      then
          printf "Failed \n"
@@ -236,10 +236,10 @@ fi;
 
 printf "\tUpdate\n"
 printf "\t\t\tNo Authentiction\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json') == 401 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'Content-Type: application/json') == 500 ]]
 then 
 	 var=$(<results.txt)
-     Expected='"Unauthorized"'
+     Expected='"Failure"'
      if [[ $Expected != "$var" ]]
      then
          printf "Failed \n"
@@ -251,10 +251,10 @@ else
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'ID: '$Authentiction'h' -H 'Content-Type: application/json') == 401 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Items -H 'ID: '$Authentiction'h' -H 'Content-Type: application/json') == 500 ]]
 then 
 	 var=$(<results.txt)
-     Expected='"Unauthorized"'
+     Expected='"Failure"'
      if [[ $Expected != "$var" ]]
      then
          printf "Failed \n"
@@ -516,7 +516,7 @@ fi;
 
 printf "\tList\n"
 printf "\t\tNo Authentiction\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List) != 401 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List) != 500 ]]
 then 
     var=$(<results.txt)
     Expected='"Unauthorized"'    
@@ -528,7 +528,7 @@ then
 fi;
 
 printf "\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List -H 'ID: '$Authentiction'h') != 401 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List -H 'ID: '$Authentiction'h') != 500 ]]
 then 
     var=$(<results.txt)
     Expected='"Unauthorized"'    
