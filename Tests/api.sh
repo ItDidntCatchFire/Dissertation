@@ -1,15 +1,15 @@
 #!/bin/bash
 Expected=""
-Port=5007
-IP=$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+')
+#Port=5007
+#IP=$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+')
 Authentiction="0f8fad5b-d9cb-469f-a165-70867728950e"
-#Port=5001
-#IP="0.0.0.0"
+Port=5001
+IP="0.0.0.0"
 
 #Start the process
 cd ../API
-nohup dotnet run --urls "https://${IP}:${Port}" > /dev/null 2>&1 &
-sleep 5
+#nohup dotnet run --urls "https://${IP}:${Port}" > /dev/null 2>&1 &
+#sleep 5
 
 cd ../Tests
 host=$"https://${IP}:${Port}/api/"
@@ -453,10 +453,10 @@ else
 fi;
 
 printf "\t\tEMPTY\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/) == 404 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected=""    
+    Expected='Failure'
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
@@ -468,10 +468,10 @@ else
 fi;
 
 printf "\t\tSPACE\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/ ) == 404 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/ ) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected=""    
+    Expected='Failure'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
