@@ -2,15 +2,14 @@
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Items;
 
-
 CREATE TABLE Users (
-	UserId CHAR(16) binary,
+	UserId CHAR(36) binary,
     Role int,
 		PRIMARY KEY (UserId)
 );
 
 CREATE TABLE Items (
-	ItemId CHAR(16) binary,
+	ItemId CHAR(36) binary,
 	Name VARCHAR(50),
 	Description VARCHAR(50),
 	ShelfLife int,
@@ -20,13 +19,13 @@ CREATE TABLE Items (
 );
 
 CREATE TABLE Inventory (
-	InventoryId CHAR(16) binary,
-    ItemId CHAR(16) binary,
+	InventoryId CHAR(36) binary,
+    ItemId CHAR(36) binary,
     Quantity int,
     Time datetime,
     Export tinyint(1),
     Monies decimal(5, 2),
-		PRIMARY KEY (InventoryId),
+		PRIMARY KEY (InventoryId, ItemId),
         FOREIGN KEY (ItemId) REFERENCES Items(ItemId)
 );
 

@@ -1,6 +1,6 @@
-﻿DELIMITER //
+﻿DELIMITER //pname
 DROP PROCEDURE IF EXISTS Item_GetById//
-CREATE PROCEDURE Item_GetById (IN itemId CHAR(36) binary) 
+CREATE PROCEDURE Item_GetById (IN pItemId CHAR(36) binary) 
 BEGIN
 	SELECT 
 		ItemId,
@@ -10,6 +10,6 @@ BEGIN
 		BuyPrice,
 		SellPrice
 	FROM Items
-    WHERE ItemId = itemId;
+    WHERE ItemId = pItemId;
 END //
 DELIMITER ;

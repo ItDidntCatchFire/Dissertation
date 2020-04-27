@@ -20,33 +20,33 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import", "Import\Import.csproj", "{021E32F0-6CCB-4F44-85C3-F64C00DB2EDD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{297FC70C-21A9-4D0E-8288-1D9B191AAB55}"
-	ProjectSection(SolutionItems) = preProject
-		CreateTables.sql = CreateTables.sql
-		Tests.sql = Tests.sql
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+	Database\CreateTables.sql = Database\CreateTables.sql
+	Database\Tests.sql = Database\Tests.sql
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{43D1CA2B-683A-48BD-A1F1-4237AA44DF51}"
-	ProjectSection(SolutionItems) = preProject
-		Item_GetAll.sql = Item_GetAll.sql
-		Item_GetById.sql = Item_GetById.sql
-		Item_Insert.sql = Item_Insert.sql
-		Item_Update.sql = Item_Update.sql
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+	Database\Items\Item_GetAll.sql = Database\Items\Item_GetAll.sql
+	Database\Items\Item_GetById.sql = Database\Items\Item_GetById.sql
+	Database\Items\Item_Insert.sql = Database\Items\Item_Insert.sql
+	Database\Items\Item_Update.sql = Database\Items\Item_Update.sql
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{4ECC723D-2561-4588-8C1B-851BBFC2136C}"
-	ProjectSection(SolutionItems) = preProject
-		User_GetAll.sql = User_GetAll.sql
-		User_GetById.sql = User_GetById.sql
-		User_Insert.sql = User_Insert.sql
-		User_Update.sql = User_Update.sql
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+	Database\Users\User_GetAll.sql = Database\Users\User_GetAll.sql
+	Database\Users\User_GetById.sql = Database\Users\User_GetById.sql
+	Database\Users\User_Insert.sql = Database\Users\User_Insert.sql
+	Database\Users\User_Update.sql = Database\Users\User_Update.sql
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{1DC14D6E-98ED-48F4-BAF7-1A50D474BD66}"
 	ProjectSection(SolutionItems) = preProject
-		Inventory_GetAll.sql = Inventory_GetAll.sql
-		Inventory_GetById.sql = Inventory_GetById.sql
-		Inventory_Insert.sql = Inventory_Insert.sql
-		Inventory_Update.sql = Inventory_Update.sql
+		Database\Inventory\Inventory_GetAll.sql = Database\Inventory\Inventory_GetAll.sql
+		Database\Inventory\Inventory_GetById.sql = Database\Inventory\Inventory_GetById.sql
+		Database\Inventory\Inventory_Insert.sql = Database\Inventory\Inventory_Insert.sql
+		Database\Inventory\Inventory_Update.sql = Database\Inventory\Inventory_Update.sql
 	EndProjectSection
 EndProject
 Global
