@@ -147,7 +147,7 @@ namespace DataLogic.DataBase
                             (DbType.Decimal, ParameterDirection.Input, "p" + nameof(item.SellPrice), item.SellPrice),
                         }));
 
-            var result = await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+            await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
             return item;
         }
 
