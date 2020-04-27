@@ -1,6 +1,5 @@
-﻿CREATE TABLE [dbo].[Items]
-(
-	[ItemId] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Name] NCHAR(50) NOT NULL, 
-    [Description] NCHAR(250) NULL 
-)
+﻿CREATE TABLE Users (
+	UserId CHAR(16) binary,
+    Role int,
+		PRIMARY KEY (UserId)
+);
