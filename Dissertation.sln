@@ -22,6 +22,31 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{297FC70C-21A9-4D0E-8288-1D9B191AAB55}"
 	ProjectSection(SolutionItems) = preProject
 		CreateTables.sql = CreateTables.sql
+		Tests.sql = Tests.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{43D1CA2B-683A-48BD-A1F1-4237AA44DF51}"
+	ProjectSection(SolutionItems) = preProject
+		Item_GetAll.sql = Item_GetAll.sql
+		Item_GetById.sql = Item_GetById.sql
+		Item_Insert.sql = Item_Insert.sql
+		Item_Update.sql = Item_Update.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{4ECC723D-2561-4588-8C1B-851BBFC2136C}"
+	ProjectSection(SolutionItems) = preProject
+		User_GetAll.sql = User_GetAll.sql
+		User_GetById.sql = User_GetById.sql
+		User_Insert.sql = User_Insert.sql
+		User_Update.sql = User_Update.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{1DC14D6E-98ED-48F4-BAF7-1A50D474BD66}"
+	ProjectSection(SolutionItems) = preProject
+		Inventory_GetAll.sql = Inventory_GetAll.sql
+		Inventory_GetById.sql = Inventory_GetById.sql
+		Inventory_Insert.sql = Inventory_Insert.sql
+		Inventory_Update.sql = Inventory_Update.sql
 	EndProjectSection
 EndProject
 Global
@@ -65,6 +90,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43D1CA2B-683A-48BD-A1F1-4237AA44DF51} = {297FC70C-21A9-4D0E-8288-1D9B191AAB55}
+		{4ECC723D-2561-4588-8C1B-851BBFC2136C} = {297FC70C-21A9-4D0E-8288-1D9B191AAB55}
+		{1DC14D6E-98ED-48F4-BAF7-1A50D474BD66} = {297FC70C-21A9-4D0E-8288-1D9B191AAB55}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1106057E-E85D-4522-8CFA-1663139EEFD7}
