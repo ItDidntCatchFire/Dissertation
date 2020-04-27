@@ -1,6 +1,6 @@
 ﻿using DataLogic.DataBase;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace API
 {
@@ -8,8 +8,7 @@ namespace API
     {
         public static void Init(IConfiguration configuration)
         {
-            DataFactory.SetConfig<SqlConnection>(
-                @"Data Source=DESKTOP-1MQKJ3E\SQLEXPRESS;Initial Catalog=Dissertation;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False");
+            DataFactory.SetConfig<MySqlConnection>("server=192.168.0.114;database=Dissertation;user=dan;password=dan;");
         }
     }
 }

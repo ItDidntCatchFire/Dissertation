@@ -1,8 +1,8 @@
 ﻿DELIMITER //
 DROP PROCEDURE IF EXISTS User_Insert//
-CREATE PROCEDURE User_Insert (IN userId CHAR(36) binary, IN role int) 
+CREATE PROCEDURE User_Insert (IN pUserId CHAR(36) binary, IN pRole int) 
 BEGIN
 	INSERT INTO Users (UserId, Role)
-    VALUES(userId, role);
+    VALUES(pUserId, pRole);
 END //
 DELIMITER ;

@@ -569,7 +569,7 @@ then
 	kill -1 $$
 fi;
 
-printf "\t\tIn valid\n"
+printf "\t\tInvalid\n"
 if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}User -H 'Content-Type: application/json' -d '"eaa0ec62-7e0d-454c-966a-171cbb17b0a1"') != 500 ]]
 then 
     printf "  http code Fail\n"

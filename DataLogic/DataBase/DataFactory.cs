@@ -20,7 +20,7 @@ namespace DataLogic.DataBase
         }
 
         internal static DbParameter[] CreateParametersWithValue(DbCommand cmd,
-            List<(DbType dbType, ParameterDirection direction, string parameterName, object value)> list)
+            IEnumerable<(DbType dbType, ParameterDirection direction, string parameterName, object value)> list)
         {
             var retVal = new List<DbParameter>();
             foreach (var (dbType, direction, parameterName, value) in list)
