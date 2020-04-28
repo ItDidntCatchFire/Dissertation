@@ -34,8 +34,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            
             //Fixes issues with CORS, it's okay as this is not public facing
             services.AddCors(options =>
             {
@@ -48,6 +46,8 @@ namespace API
                             .AllowAnyHeader();
                     });
             });
+            
+            services.AddControllers();
             
             //Add the Auth filter so only Authorized people can use the endpoints
             services.AddMvc(options =>
@@ -108,18 +108,18 @@ namespace API
             
             app.UseCors("AllowAll");
 
-            app.Use(async (ctx, next) =>
-            {
-                await next();
-                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-                {
-            
-                    ctx.Response.StatusCode = 500;
-                    await ctx.Response.WriteAsync("Failure");
-                    
-                    //ctx.Response.Body = GenerateStreamFromString("Failure");
-                }
-            });
+            // app.Use(async (ctx, next) =>
+            // {
+            //     await next();
+            //     if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+            //     {
+            //
+            //         ctx.Response.StatusCode = 500;
+            //         await ctx.Response.WriteAsync("Failure");
+            //         
+            //         //ctx.Response.Body = GenerateStreamFromString("Failure");
+            //     }
+            // });
             
             app.UseMvc();
         }

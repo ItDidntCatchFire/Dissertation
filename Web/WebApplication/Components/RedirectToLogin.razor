@@ -1,4 +1,4 @@
-﻿@inject NavigationManager NavigItemLogicationManager
+﻿@inject NavigationManager NavigationManager
 
 @code {
     [Parameter]
@@ -6,6 +6,7 @@
     
     protected override void OnInitialized()
     {
+        
         NavigationManager.NavigateTo($"Login/{ReturnUrl}");
     }
 }

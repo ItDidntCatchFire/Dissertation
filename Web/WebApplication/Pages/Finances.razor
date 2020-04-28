@@ -64,7 +64,7 @@ else
                                     @foreach (var inventory in nameGroup)
                                     {
                                         <tr>
-                                            <td>@inventory.ItemId</td>
+                                            <td>@(items.First(x => x.ItemId == inventory.ItemId).Name ?? inventory.ItemId.ToString())</td>
                                             <td>@(inventory.Export ? "Yes" : "No")</td>
                                             <td>@inventory.Quantity</td>
                                             <td>£@inventory.Monies.ToString("0.00")</td>
@@ -101,15 +101,20 @@ else
 
 @code {
     private IEnumerable<Business.Models.Inventory> inventories;
+    private IEnumerable<Business.Models.Item> items;
     private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
-        if (response.IsSuccessStatusCode)
-        {
+        var itemResponse = await Utils.GetAsync($"{await getURLTask}api/Items/List");
+        var inventoryResponse = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
 
-            inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await response.Content.ReadAsStringAsync()); 
+        if (itemResponse.IsSuccessStatusCode)
+            items = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());
+        
+        if (inventoryResponse.IsSuccessStatusCode)
+        {
+            inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync()); 
             query = from inventory in inventories
                 group inventory by inventory.InventoryId
                 into newGroup
