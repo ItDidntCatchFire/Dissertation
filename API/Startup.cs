@@ -108,18 +108,18 @@ namespace API
             
             app.UseCors("AllowAll");
 
-            // app.Use(async (ctx, next) =>
-            // {
-            //     await next();
-            //     if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-            //     {
-            //
-            //         ctx.Response.StatusCode = 500;
-            //         await ctx.Response.WriteAsync("Failure");
-            //         
-            //         //ctx.Response.Body = GenerateStreamFromString("Failure");
-            //     }
-            // });
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                {
+            
+                    ctx.Response.StatusCode = 500;
+                    await ctx.Response.WriteAsync("Failure");
+                    
+                    //ctx.Response.Body = GenerateStreamFromString("Failure");
+                }
+            });
             
             app.UseMvc();
         }
