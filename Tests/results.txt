@@ -1,1 +1,1 @@
-{"userId":"0f8fad5b-d9cb-469f-a165-70867728950e","role":1}
+[{"inventoryId":"5b078b5a-d987-4424-88ea-57f2cca2866e","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":5,"time":"2020-04-28T01:41:06.5593444+01:00","export":true,"monies":1},{"inventoryId":"5b078b5a-d987-4424-88ea-57f2cca2866e","itemId":"eaa0ec62-7e0d-454c-966a-171cbb17b0a1","quantity":1,"time":"2020-04-28T01:41:06.5595751+01:00","export":true,"monies":2}]
