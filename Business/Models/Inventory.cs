@@ -16,8 +16,13 @@ namespace Business.Models
         {
             var invalidReasons = new List<string>();
             
-            if (Quantity <= -1)
+            if (ItemId == Guid.Empty)
+                invalidReasons.Add("ItemId Empty");
+            
+            if (Quantity < 0)
                 invalidReasons.Add("Quantity negative");
+            if (Quantity == 0)
+                invalidReasons.Add("Quantity zero");
             
             if (Monies <= -1)
                 invalidReasons.Add("Monies negative");

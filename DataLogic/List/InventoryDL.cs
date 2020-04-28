@@ -11,7 +11,7 @@ namespace DataLogic.List
         public static List<Models.InventoryDL> Inventory = new List<Models.InventoryDL>();
     }
 
-    public class InventoryDL : Models.InventoryDL, IInventoryRepository<Models.InventoryDL, Guid>
+    public class InventoryDL : IInventoryRepository<Models.InventoryDL, Guid>
     {
         public async Task<IEnumerable<Models.InventoryDL>> ListAsync()
             => ListStore.Inventory;

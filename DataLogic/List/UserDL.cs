@@ -11,7 +11,7 @@ namespace DataLogic.List
         public static List<Models.UserDL> Users = new List<Models.UserDL>();
     }
     
-    public class UserDL : Models.UserDL, IUserRepository<Models.UserDL, Guid>
+    public class UserDL : IUserRepository<Models.UserDL, Guid>
     {
         public async Task<Models.UserDL> GetByIdAsync(Guid id)
             => ListStore.Users.FirstOrDefault(x => x.UserId == id);

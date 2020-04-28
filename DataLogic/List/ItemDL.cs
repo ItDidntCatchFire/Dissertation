@@ -11,7 +11,7 @@ namespace DataLogic.List
         public static List<Models.ItemDL> items = new List<Models.ItemDL>();
     }
 
-    public class ItemDL : Models.ItemDL, IItemRepository<Models.ItemDL, Guid>
+    public class ItemDL : IItemRepository<Models.ItemDL, Guid>
     {
         public async Task<IEnumerable<Models.ItemDL>> ListAsync()
         {
