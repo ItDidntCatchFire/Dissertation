@@ -1,0 +1,11 @@
+﻿DELIMITER //
+DROP PROCEDURE IF EXISTS User_GetById//
+CREATE PROCEDURE User_GetById (IN pUserId CHAR(36) binary) 
+BEGIN
+	SELECT 
+		UserId,
+		Role
+	FROM Users
+    WHERE UserId = pUserId;
+END //
+DELIMITER ;

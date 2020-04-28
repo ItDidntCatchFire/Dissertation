@@ -58,9 +58,9 @@ namespace API
             });
             
             //Storage
-            services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.List.ItemDL>();
-            services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.InventoryDL>();
-            services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.List.UserDL>();
+            services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.DataBase.ItemDL>();
+            services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.DataBase.InventoryDL>();
+            services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.DataBase.UserDL>();
 
             //Logic
             services.AddSingleton<Business.Logic.ItemLogic>();
@@ -95,6 +95,7 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<Middleware.LoggingMiddleware>();
             app.UseMiddleware<Middleware.AuthMiddleware>();
             
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
@@ -112,7 +113,7 @@ namespace API
                 await next();
                 if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
                 {
-
+            
                     ctx.Response.StatusCode = 500;
                     await ctx.Response.WriteAsync("Failure");
                     
