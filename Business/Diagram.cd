@@ -3,7 +3,7 @@
   <Class Name="Business.Logic.InventoryLogic">
     <Position X="10" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAIAgAAAAAAAABIIA=</HashCode>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAACAAAIAgAAAAAAAABIIA=</HashCode>
       <FileName>Logic\InventoryLogic.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -56,21 +56,35 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Business.Validation.ValidationResult">
-    <Position X="12.75" Y="0.5" Width="1.5" />
+    <Position X="10" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Validation\ValidationResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Business.Validation.Validator">
-    <Position X="11" Y="0.5" Width="1.5" />
+    <Position X="8.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Validation\Validator.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="Business.Logic.CheckoutLogic">
+    <Position X="6.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAABACAA=</HashCode>
+      <FileName>Logic\CheckoutLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Business.Logic.TransacationLogic">
+    <Position X="1.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Logic\TransacationLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="Business.Logic.ILogic&lt;T, U&gt;">
-    <Position X="8" Y="0.5" Width="1.5" />
+    <Position X="4.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIIA=</HashCode>
       <FileName>Logic\ILogic.cs</FileName>

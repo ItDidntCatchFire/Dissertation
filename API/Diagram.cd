@@ -3,13 +3,13 @@
   <Class Name="API.Controllers.InventoryController">
     <Position X="4" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAMAAAAAKAAAQAAAAAAAAAAAAAAAAAAABAAQAAIAIAA=</HashCode>
+      <HashCode>AAMAAAAAKAAAQAAAAAAAAAAACAAAAAAABAAQAAIAIAA=</HashCode>
       <FileName>Controllers\InventoryController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="API.Controllers.ItemsController">
-    <Position X="5.75" Y="2.5" Width="1.5" />
+    <Position X="5.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAMAQAAACAAAQAAAAAAAAAAAAAAAAAAABIAAAAIAIAA=</HashCode>
       <FileName>Controllers\ItemsController.cs</FileName>
@@ -17,7 +17,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="API.Controllers.UserController">
-    <Position X="7.5" Y="2.5" Width="1.5" />
+    <Position X="7.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAIAAAAAAAAAA=</HashCode>
       <FileName>Controllers\UserController.cs</FileName>
@@ -38,6 +38,48 @@
       <FileName>Middleware\AuthMiddleware.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="API.Controllers.CheckoutController">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Controllers\CheckoutController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Controllers.TransactionController">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\TransactionController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Middleware.LoggingMiddleware">
+    <Position X="7.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAA=</HashCode>
+      <FileName>Middleware\LoggingMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.ObjectFactory">
+    <Position X="9.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>ObjectFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Program">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="API.Startup">
+    <Position X="9.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAgAAACAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="API.Controllers.IController&lt;T, U&gt;">
     <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -52,5 +94,19 @@
       <FileName>Controllers\IController.cs</FileName>
     </TypeIdentifier>
   </Interface>
+  <Enum Name="API.eExport">
+    <Position X="5.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACCAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="API.eImport">
+    <Position X="7.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
