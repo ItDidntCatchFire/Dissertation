@@ -144,6 +144,18 @@ namespace API.Controllers
             }
         }
         
+        [HttpGet("Stock")]
+        public async Task<IActionResult> GetStock() {
+            try {
+                return Ok(await _inventoryLogic.GetStock());
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Failure");
+            }
+        }
+
         private async Task<IEnumerable<Business.Models.Inventory>> getAll()
             => (await _inventoryLogic.ListAsync());
     }
