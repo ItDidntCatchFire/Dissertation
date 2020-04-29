@@ -66,6 +66,7 @@ namespace API
             services.AddSingleton<Business.Logic.ItemLogic>();
             services.AddSingleton<Business.Logic.InventoryLogic>();
             services.AddSingleton<Business.Logic.UserLogic>();
+            services.AddSingleton<Business.Logic.TransacationLogic>();
 
             //Exporters
             services.AddScoped<Export.JsonExport>();

@@ -4,7 +4,7 @@ Expected=""
 #IP=$(ip addr show wlp36s0 | grep -Po 'inet \K[\d.]+')
 Authentiction="0f8fad5b-d9cb-469f-a165-70867728950e"
 Port=5001
-IP="0.0.0.0"
+IP="localhost"
  
 #Start the process
 cd ../API
@@ -890,9 +890,9 @@ else
 	kill -1 $$
 fi;
 
-printf "\tInsert Get\n"
+printf "\tGet\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory) != 500 ]]
 then 
     var=$(<results.txt)
     Expected='"Unauthorized"'    
@@ -904,7 +904,7 @@ then
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory -H 'ID: '$Authentiction'h') != 500 ]]
 then 
     var=$(<results.txt)
     Expected='"Unauthorized"'    
@@ -922,4 +922,116 @@ then
   	kill -1 $$
 fi;
 
+printf "\tStock\n"
+printf "\t\t\tNo Authentication\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock) != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+fi;
+
+printf "\t\t\tUnauthenticated\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock -H 'ID: '$Authentiction'h') != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
+
+printf "\t\t\tWorking\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock -H 'ID: '$Authentiction) == 200 ]]
+then 
+    var=$(<results.txt)
+    Expected='[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":-8,"time":"0001-01-01T00:00:00","export":false,"monies":0},{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"eaa0ec62-7e0d-454c-966a-171cbb17b0a1","quantity":-1,"time":"0001-01-01T00:00:00","export":false,"monies":0}]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
+
+printf "Transaction\n"
+printf "\tCost\n"
+printf "\t\t\tNo Authentication\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost) != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+fi;
+
+printf "\t\t\tUnauthenticated\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost -H 'ID: '$Authentiction'h') != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
+
+dateTo=(date +%FT%T)
+printf "\t\t\tWorking\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?dateFrom=0001-01-01T00:00:00\&dateTo=${dateTo} -H 'ID: '$Authentiction) == 200 ]]
+then 
+    var=$(<results.txt)
+    Expected='0'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
+
+printf "\tRevenue\n"
+printf "\t\t\tNo Authentication\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue) != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+fi;
+
+printf "\t\t\tUnauthenticated\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue -H 'ID: '$Authentiction'h') != 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Unauthorized"'    
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
+
+printf "\t\t\tWorking\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=${dateTo} -H 'ID: '$Authentiction) == 200 ]]
+then 
+    var=$(<results.txt)
+    Expected='4'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+fi;
 printf "Passed\n"

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Business.Logic
@@ -85,6 +86,23 @@ namespace Business.Logic
                 });
             
             return retVal;
+        }
+
+        public async Task<IEnumerable<Models.Inventory>> GetStock() {
+            var inventoryDLs = await _inventoryRepository.ListAsync();
+
+            var inventories = new List<Models.Inventory>();
+			foreach (var item in inventoryDLs.GroupBy(x => x.ItemId)) {
+				var totalImpored = item.Where(x => x.Export == false).Sum(x => x.Quantity);
+				var totalExported = item.Where(x => x.Export == true).Sum(x => x.Quantity);
+				
+				inventories.Add(new Models.Inventory() {
+					ItemId = item.Key,
+					Quantity = totalImpored - totalExported
+				});
+			}
+
+            return inventories;
         }
 
         public Task DeleteAsync(IEnumerable<Models.Inventory> type)
