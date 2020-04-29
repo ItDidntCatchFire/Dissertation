@@ -5,7 +5,7 @@
 
 <form action="#" @onsubmit="Scan">
 	Guid to Scan
-	<input type="text" name="txt" />
+	<input @bind="CurrentValue" type="text" name="txt" />
 </form>
 
 <button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
@@ -18,6 +18,8 @@
 	private List<Cart.Item> items = new List<Cart.Item>();
 
 	private Cart child;
+
+	private string CurrentValue;
 
 	public void callback(List<Cart.Item> _items) {
 		items = _items;
@@ -34,7 +36,7 @@
 	}
 
 	private void Scan() {
-		child.UpdateMessage(Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"));
+		child.UpdateMessage(CurrentValue);
 
 		StateHasChanged();
 	}
