@@ -102,7 +102,7 @@ namespace API {
 				if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted) {
 
 					ctx.Response.StatusCode = 500;
-					await ctx.Response.WriteAsync("Failure");
+					await ctx.Response.WriteAsync("\"Failure\"");
 				}
 			});
 
