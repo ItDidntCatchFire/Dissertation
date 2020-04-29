@@ -3,7 +3,7 @@
 @inject Task<string> getURLTask
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
-@inject CustomAuthStateProvider AuthStateProvider
+@inject AuthStateProvider authStateProvider
 @attribute [AllowAnonymous]
 
 <AuthorizeView>
@@ -36,15 +36,15 @@
 			Utils.UserId = JsonConvert.DeserializeObject<Business.Models.User>(await response.Content.ReadAsStringAsync()).UserId;
 			message = "";
 			userId = "";
-			AuthStateProvider.IsAuthenticated = true;
-			AuthStateProvider.NotifyAuthenticationStateChanged();
+			authStateProvider.IsAuthenticated = true;
+			authStateProvider.NotifyAuthenticationStateChanged();
 			NavigationManager.NavigateTo(ReturnUrl ?? "\\");
 		}
 		else {
 			message = "Login failed";
 			Utils.UserId = Guid.Empty;
-			AuthStateProvider.IsAuthenticated = false;
-			AuthStateProvider.NotifyAuthenticationStateChanged();
+			authStateProvider.IsAuthenticated = false;
+			authStateProvider.NotifyAuthenticationStateChanged();
 			StateHasChanged();
 		}
 
@@ -54,9 +54,9 @@
 		Utils.UserId = Guid.Empty;
 		userId = "";
 		message = "Logged out";
-		AuthStateProvider.IsAuthenticated = false;
+		authStateProvider.IsAuthenticated = false;
 
-		AuthStateProvider.NotifyAuthenticationStateChanged();
+		authStateProvider.NotifyAuthenticationStateChanged();
 
 		StateHasChanged();
 	}
