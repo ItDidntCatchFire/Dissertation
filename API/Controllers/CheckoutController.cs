@@ -16,7 +16,7 @@ namespace API.Controllers {
 			_checkoutLogic = checkoutLogic;
 		}
 
-		[HttpPost("Checkout")]
+		[HttpPost]
 		public async Task<IActionResult> Checkout(List<Business.Models.Inventory> inventories) {
 			try {
 				var validation = new Business.Validation.ValidationResult();
@@ -37,14 +37,27 @@ namespace API.Controllers {
 			}
 		}
 
-		[HttpGet("Purchase")]
+		[HttpGet]
 		[Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
 		public async Task<IActionResult> Purchase() {
 			try {
 
-				var items = _checkoutLogic.ListAsync();
-				await _checkoutLogic.Clear();
+				var items = await _checkoutLogic.ListAsync();
 				return Ok(items);
+			}
+			catch (Exception ex) {
+				Console.WriteLine(ex.ToString());
+				return StatusCode(500, "Failure");
+			}
+		}
+
+		[HttpGet("Clear")]
+		[Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
+		public async Task<IActionResult> Clear() {
+			try {
+
+				await _checkoutLogic.Clear();
+				return Ok();
 			}
 			catch (Exception ex) {
 				Console.WriteLine(ex.ToString());

@@ -1034,4 +1034,16 @@ then
         kill -1 $$
     fi;
 fi;
+
+printf "Checkout\n"
+
+
+
+
+
+
+
+
+
+
 printf "Passed\n"
