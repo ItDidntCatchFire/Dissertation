@@ -8,7 +8,29 @@
 	</p>
 }
 else {
-
+	<div class="container my-4" style="overflow:hidden; display:flex; flex-direction:row">
+		<div style="flex-grow:1">
+			<p>Overall</p>
+			<p>Total Cost: @totalCost</p>
+			<p>Total Revenue: @totalRevenue</p>
+		</div>
+		<div style="flex-grow:1">
+			<p>Past Week</p>
+			<p>Total Cost: @totalWeekCost</p>
+			<p>Total Revenue: @totalWeekRevenue</p>
+		</div>
+		<div style="flex-grow:1">
+			<p>Past Month</p>
+			<p>Total Cost: @totalMonthCost</p>
+			<p>Total Revenue: @totalMonthRevenue</p>
+		</div>
+		<div style="flex-grow:1">
+			<p>Past Year</p>
+			<p>Total Cost: @totalYearCost</p>
+			<p>Total Revenue: @totalYearRevenue</p>
+		</div>
+	</div>
+	
 	<div class="container my-4">
 		<!--Accordion wrapper-->
 		<div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
@@ -95,13 +117,56 @@ else {
 }
 
 @code {
-	private IEnumerable<Business.Models.Inventory> inventories;
-	private IEnumerable<Business.Models.Item> items;
+	private IEnumerable<Business.Models.Inventory>
+		inventories;
+	private IEnumerable<Business.Models.Item>
+		items;
 	private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
 
+	private decimal totalRevenue, totalWeekRevenue, totalMonthRevenue, totalYearRevenue;
+	private decimal totalCost, totalWeekCost, totalMonthCost, totalYearCost;
+
 	protected override async Task OnInitializedAsync() {
-		var itemResponse = await Utils.GetAsync($"{await getURLTask}api/Items/List");
-		var inventoryResponse = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
+
+		var url = await getURLTask;
+		var itemResponse = await Utils.GetAsync($"{url}api/Items/List");
+		var inventoryResponse = await Utils.GetAsync($"{url}api/Inventory/List");
+
+		var totalWeekRevenueResponse = await Utils.GetAsync($"{url}api/Transaction/Revenue?dateFrom={DateTime.Now.AddDays(-7).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalWeekCostResponse = await Utils.GetAsync($"{url}api/Transaction/Cost?dateFrom={DateTime.Now.AddDays(-7).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalMonthRevenueResponse = await Utils.GetAsync($"{url}api/Transaction/Revenue?dateFrom={DateTime.Now.AddMonths(-1).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalMonthCostResponse = await Utils.GetAsync($"{url}api/Transaction/Cost?dateFrom={DateTime.Now.AddMonths(-1).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalYearRevenueResponse = await Utils.GetAsync($"{url}api/Transaction/Revenue?dateFrom={DateTime.Now.AddYears(-1).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalYearCostResponse = await Utils.GetAsync($"{url}api/Transaction/Cost?dateFrom={DateTime.Now.AddYears(-1).ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalRevenueResponse = await Utils.GetAsync($"{url}api/Transaction/Revenue?dateFrom={DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.MaxValue.ToString("yyyy-MM-ddTHH:mm:ss")}");
+		var totalCostResponse = await Utils.GetAsync($"{url}api/Transaction/Cost?dateFrom={DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss")}&dateTo={DateTime.MaxValue.ToString("yyyy-MM-ddTHH:mm:ss")}");
+
+
+		if (totalRevenueResponse.IsSuccessStatusCode)
+			totalRevenue = JsonConvert.DeserializeObject<decimal>(await totalRevenueResponse.Content.ReadAsStringAsync());
+
+		if (totalCostResponse.IsSuccessStatusCode)
+			totalCost = JsonConvert.DeserializeObject<decimal>(await totalCostResponse.Content.ReadAsStringAsync());
+
+		if (totalWeekRevenueResponse.IsSuccessStatusCode)
+			totalWeekRevenue = JsonConvert.DeserializeObject<decimal>(await totalWeekRevenueResponse.Content.ReadAsStringAsync());
+
+		if (totalWeekCostResponse.IsSuccessStatusCode)
+			totalWeekCost = JsonConvert.DeserializeObject<decimal>(await totalWeekCostResponse.Content.ReadAsStringAsync());
+
+		if (totalMonthRevenueResponse.IsSuccessStatusCode)
+			totalMonthRevenue = JsonConvert.DeserializeObject<decimal>(await totalMonthRevenueResponse.Content.ReadAsStringAsync());
+
+		if (totalMonthCostResponse.IsSuccessStatusCode)
+			totalMonthCost = JsonConvert.DeserializeObject<decimal>(await totalMonthCostResponse.Content.ReadAsStringAsync());
+
+		if (totalYearRevenueResponse.IsSuccessStatusCode)
+			totalYearRevenue = JsonConvert.DeserializeObject<decimal>(await totalYearRevenueResponse.Content.ReadAsStringAsync());
+
+		if (totalYearCostResponse.IsSuccessStatusCode)
+			totalYearCost = JsonConvert.DeserializeObject<decimal>(await totalYearCostResponse.Content.ReadAsStringAsync());
+
+
 
 		if (itemResponse.IsSuccessStatusCode)
 			items = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());

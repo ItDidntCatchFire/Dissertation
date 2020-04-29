@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Middleware {
@@ -15,11 +16,12 @@ namespace API.Middleware {
 			var request = context.Request.Path;
 			var type = context.Request.Method;
 			Directory.CreateDirectory("Logging");
-			await using (var sw = new StreamWriter($"Logging/{DateTime.Now.Date:yy-MM-dd}.txt", true)) {
-				await sw.WriteLineAsync($"{DateTime.Now.TimeOfDay:g} {type} {request}");
-				sw.Close();
-			}
 
+			using (var mutex = new Mutex(false, "MyMutex")) {
+				mutex.WaitOne();
+				File.AppendAllText($"Logging/{DateTime.Now.Date:yy-MM-dd}.txt", $"{DateTime.Now.TimeOfDay:g} {type} {request}{Environment.NewLine}");
+				mutex.ReleaseMutex();
+			}
 
 			// Call the next delegate/middleware in the pipeline
 			await _next(context);
