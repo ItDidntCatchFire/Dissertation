@@ -17,7 +17,7 @@ namespace API.Controllers {
 		}
 
 		[HttpGet("Cost")]
-		public async Task<IActionResult> GetCost([FromQuery] DateTime dateFrom,[FromQuery] DateTime dateTo) {
+		public async Task<IActionResult> GetCost([FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo) {
 			try {
 				return Ok(await _transacationLogic.CalculateCost(dateFrom, dateTo));
 			}
@@ -28,7 +28,7 @@ namespace API.Controllers {
 		}
 
 		[HttpGet("Revenue")]
-		public async Task<IActionResult> GetRevenue([FromQuery] DateTime dateFrom,[FromQuery] DateTime dateTo) {
+		public async Task<IActionResult> GetRevenue([FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo) {
 			try {
 				return Ok(await _transacationLogic.CalculateRevenue(dateFrom, dateTo));
 			}

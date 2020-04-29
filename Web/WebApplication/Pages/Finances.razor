@@ -2,124 +2,117 @@
 @inject Task<string> getURLTask
 @attribute [Authorize]
 
-@if (inventories == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
+@if (inventories == null) {
+	<p>
+		<em>Loading...</em>
+	</p>
 }
-else
-{
-    
-    <div class="container my-4">
-        <!--Accordion wrapper-->
-        <div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
-            @foreach (var nameGroup in query)
-            {
-            @* Accordion *@
-                <div class="card">
+else {
 
-                    @* Header *@
-                    <div class="card-header" role="tab" id="heading@(nameGroup.Key)">
-                        <!-- Heading -->
-                        <a data-toggle="collapse" data-parent="#accordionEx24" href="#collapse@(nameGroup.Key)" aria-expanded="true" aria-controls="collapse@(nameGroup.Key)">
-                            <h5 class="mt-1 mb-0">
-                                <span>@nameGroup.Key</span>
-                                <span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => x.Monies).ToString("0.00")</span>
-                                <i class="fas fa-angle-down rotate-icon"></i>
-                            </h5>
-                        </a>
-                    </div>
+	<div class="container my-4">
+		<!--Accordion wrapper-->
+		<div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
+			@foreach (var nameGroup in query) {
+				@* Accordion *@
+				<div class="card">
 
-                    <!-- Card body -->
-                    <div id="collapse@(nameGroup.Key)" class="collapse hide" role="tabpanel" aria-labelledby="heading@(nameGroup.Key)" data-parent="#accordionEx24">
-                        <div class="card-body">
+					@* Header *@
+					<div class="card-header" role="tab" id="heading@(nameGroup.Key)">
+						<!-- Heading -->
+						<a data-toggle="collapse" data-parent="#accordionEx24" href="#collapse@(nameGroup.Key)" aria-expanded="true" aria-controls="collapse@(nameGroup.Key)">
+							<h5 class="mt-1 mb-0">
+								<span>@nameGroup.Key</span>
+								<span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => x.Monies).ToString("0.00")</span>
+								<i class="fas fa-angle-down rotate-icon"></i>
+							</h5>
+						</a>
+					</div>
 
-                            <!-- Table responsive wrapper -->
-                            <div class="table-responsive mx-3">
-                                <!--Table-->
-                                <table class="table table-hover mb-0">
-                                    <!--Table head-->
-                                    <thead>
-                                    <tr>
-                                        <th class="th-lg">
-                                            <a>Id<i class="fas fa-sort ml-1"></i></a>
-                                        </th>
-                                        <th class="th-lg">
-                                            <a>Export<i class="fas fa-sort ml-1"></i></a>
-                                        </th>
-                                        <th class="th-lg">
-                                            <a>Quantity<i class="fas fa-sort ml-1"></i></a>
-                                        </th>
-                                        <th class="th-lg">
-                                            <a>Total<i class="fas fa-sort ml-1"></i></a>
-                                        </th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <!--Table head-->
+					<!-- Card body -->
+					<div id="collapse@(nameGroup.Key)" class="collapse hide" role="tabpanel" aria-labelledby="heading@(nameGroup.Key)" data-parent="#accordionEx24">
+						<div class="card-body">
 
-                                    <!--Table body-->
-                                    <tbody>
-                                    @foreach (var inventory in nameGroup)
-                                    {
-                                        <tr>
-                                            <td>@(items.First(x => x.ItemId == inventory.ItemId).Name ?? inventory.ItemId.ToString())</td>
-                                            <td>@(inventory.Export ? "Yes" : "No")</td>
-                                            <td>@inventory.Quantity</td>
-                                            <td>£@inventory.Monies.ToString("0.00")</td>
-                                            <td>
-                                                <a>
-                                                    <i class="fas fa-info mx-1" data-toggle="tooltip" data-placement="top"
-                                                       title="Tooltip on top">
-                                                    </i>
-                                                </a>
-                                                <a>
-                                                    <i class="fas fa-pen-square mx-1"></i>
-                                                </a>
-                                                <a>
-                                                    <i class="fas fa-times mx-1"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                    </tbody>
-                                    <!--Table body-->
-                                </table>
-                                <!--Table-->
-                            </div>
-                            <!-- Table responsive wrapper -->
+							<!-- Table responsive wrapper -->
+							<div class="table-responsive mx-3">
+								<!--Table-->
+								<table class="table table-hover mb-0">
+									<!--Table head-->
+									<thead>
+										<tr>
+											<th class="th-lg">
+												<a>Id<i class="fas fa-sort ml-1"></i></a>
+											</th>
+											<th class="th-lg">
+												<a>Export<i class="fas fa-sort ml-1"></i></a>
+											</th>
+											<th class="th-lg">
+												<a>Quantity<i class="fas fa-sort ml-1"></i></a>
+											</th>
+											<th class="th-lg">
+												<a>Total<i class="fas fa-sort ml-1"></i></a>
+											</th>
+											<th></th>
+										</tr>
+									</thead>
+									<!--Table head-->
+									<!--Table body-->
+									<tbody>
+										@foreach (var inventory in nameGroup) {
+											<tr>
+												<td>@(items.First(x => x.ItemId == inventory.ItemId).Name ?? inventory.ItemId.ToString())</td>
+												<td>@(inventory.Export ? "Yes" : "No")</td>
+												<td>@inventory.Quantity</td>
+												<td>£@inventory.Monies.ToString("0.00")</td>
+												<td>
+													<a>
+														<i class="fas fa-info mx-1" data-toggle="tooltip" data-placement="top"
+														   title="Tooltip on top">
+														</i>
+													</a>
+													<a>
+														<i class="fas fa-pen-square mx-1"></i>
+													</a>
+													<a>
+														<i class="fas fa-times mx-1"></i>
+													</a>
+												</td>
+											</tr>
+										}
+									</tbody>
+									<!--Table body-->
+								</table>
+								<!--Table-->
+							</div>
+							<!-- Table responsive wrapper -->
 
-                        </div>
-                    </div>
+						</div>
+					</div>
 
-                </div>
-            }
-        </div>
-    </div>
+				</div>
+			}
+		</div>
+	</div>
 }
 
 @code {
-    private IEnumerable<Business.Models.Inventory> inventories;
-    private IEnumerable<Business.Models.Item> items;
-    private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
+	private IEnumerable<Business.Models.Inventory> inventories;
+	private IEnumerable<Business.Models.Item> items;
+	private IOrderedEnumerable<IGrouping<Guid, Business.Models.Inventory>> query;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var itemResponse = await Utils.GetAsync($"{await getURLTask}api/Items/List");
-        var inventoryResponse = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
+	protected override async Task OnInitializedAsync() {
+		var itemResponse = await Utils.GetAsync($"{await getURLTask}api/Items/List");
+		var inventoryResponse = await Utils.GetAsync($"{await getURLTask}api/Inventory/List");
 
-        if (itemResponse.IsSuccessStatusCode)
-            items = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());
-        
-        if (inventoryResponse.IsSuccessStatusCode)
-        {
-            inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync()); 
-            query = from inventory in inventories
-                group inventory by inventory.InventoryId
-                into newGroup
-                orderby newGroup.Key
-                select newGroup;
-        }
-    }
+		if (itemResponse.IsSuccessStatusCode)
+			items = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());
+
+		if (inventoryResponse.IsSuccessStatusCode) {
+			inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync());
+			query = from inventory in inventories
+					group inventory by inventory.InventoryId
+				into newGroup
+					orderby newGroup.Key
+					select newGroup;
+		}
+	}
 }

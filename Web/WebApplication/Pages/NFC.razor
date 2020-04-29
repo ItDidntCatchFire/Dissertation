@@ -2,17 +2,16 @@
 @using WebApplication.Components
 @attribute [AllowAnonymous]
 
-<Cart @ref="child" NFC="true" callBack="callback"/>
+<Cart @ref="child" NFC="true" callBack="callback" />
 
 @code
 {
-    private List<Cart.Item> Items;
+	private List<Cart.Item> Items;
 
-    private Cart child;
+	private Cart child;
 
-    public void callback(List<Cart.Item> items)
-    {
-        Items = items;
-        StateHasChanged();
-    }
+	public void callback(List<Cart.Item> items) {
+		Items = items;
+		StateHasChanged();
+	}
 }

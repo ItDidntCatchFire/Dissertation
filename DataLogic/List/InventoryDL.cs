@@ -1,11 +1,10 @@
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Repository;
 
-namespace DataLogic.List
-{
+namespace DataLogic.List {
     internal static partial class ListStore
     {
         public static List<Models.InventoryDL> Inventory = new List<Models.InventoryDL>();

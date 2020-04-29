@@ -4,67 +4,61 @@
 @attribute [Authorize]
 
 <form action="#" @onsubmit="Scan">
-    Guid to Scan
-    <input type="text" name="txt"/>
+	Guid to Scan
+	<input type="text" name="txt" />
 </form>
 
 <button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
-<Cart @ref="child" NFC="false" callBack="callback"/>
+<Cart @ref="child" NFC="false" callBack="callback" />
 
 
 @code
 {
-    private List<Cart.Item> items = new List<Cart.Item>();
+	private List<Cart.Item> items = new List<Cart.Item>();
 
-    private Cart child;
+	private Cart child;
 
-    public void callback(List<Cart.Item> _items)
-    {
-        items = _items;
-        StateHasChanged();
-    }
+	public void callback(List<Cart.Item> _items) {
+		items = _items;
+		StateHasChanged();
+	}
 
-    protected override void OnInitialized()
-    {
-    //Get the contents of the basket
-    // var timer = new System.Threading.Timer(
-    //     e => Scan(),  
-    //     null, 
-    //     TimeSpan.Zero, 
-    //     TimeSpan.FromMilliseconds(500));
-    }
+	protected override void OnInitialized() {
+		//Get the contents of the basket
+		// var timer = new System.Threading.Timer(
+		//     e => Scan(),
+		//     null,
+		//     TimeSpan.Zero,
+		//     TimeSpan.FromMilliseconds(500));
+	}
 
-    private void Scan()
-    {
-        child.UpdateMessage(Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"));
+	private void Scan() {
+		child.UpdateMessage(Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"));
 
-        StateHasChanged();
-    }
+		StateHasChanged();
+	}
 
-    private Guid InvId;
+	private Guid InvId;
 
-    private async void Checkout()
-    {
-        var inventory = new List<Business.Models.Inventory>();
-        foreach (var item in items)
-            inventory.Add(new Business.Models.Inventory()
-            {
-                ItemId = item.ItemId,
-                Time = DateTime.Now,
-                Quantity = item.Quantity,
-                Monies = item.SellPrice,
-                Export = true
-            });
+	private async void Checkout() {
+		var inventory = new List<Business.Models.Inventory>();
+		foreach (var item in items)
+			inventory.Add(new Business.Models.Inventory() {
+				ItemId = item.ItemId,
+				Time = DateTime.Now,
+				Quantity = item.Quantity,
+				Monies = item.SellPrice,
+				Export = true
+			});
 
-        var response = await Utils.PostAsync("api/Inventory/List", items);
-        if (response.IsSuccessStatusCode)
-        {
-            InvId = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
-        
-            items = new List<Cart.Item>();
-            StateHasChanged();
-            child.Clear();    
-        }
-    }
+		var response = await Utils.PostAsync("api/Inventory/List", items);
+		if (response.IsSuccessStatusCode) {
+			InvId = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
+
+			items = new List<Cart.Item>();
+			StateHasChanged();
+			child.Clear();
+		}
+	}
 }

@@ -13,42 +13,38 @@
 <button class="btn btn-primary" @onclick="@(() => { Download("api/Items/ExportXML", $"Items-{DateTime.Now:MM/dd/yyyy HH:mm:ss}.xml"); })">Export XML</button>
 
 <h2>Import</h2>
-  <label for="fileUpload">Inventory JSON:</label>
-<input type="file" id="fileUpload"  accept=".json" @onchange="@(() => { UploadFile("ImportJSON");})"/>
+<label for="fileUpload">Inventory JSON:</label>
+<input type="file" id="fileUpload" accept=".json" @onchange="@(() => { UploadFile("ImportJSON");})" />
 <p>@message</p>
 
 @code {
-    private static Action<string,string> _action;
-    private string message = "";
-    protected override void OnInitialized()
-    {
-        _action = import;
-    }
-    
-    private async void Download(string path, string name)
-    {
-        var response =  await Utils.GetAsync((await getURLTask) + path);
-        if (response.IsSuccessStatusCode)
-        {
-            var buffer = Encoding.UTF8.GetBytes(await response.Content.ReadAsStringAsync());
-            JSRuntime.InvokeAsync<object>(
-            "saveAsFile",
-                name,
-               Convert.ToBase64String(buffer));    
-        }
-    }
-    
-    private async void UploadFile(string type)
-        => await JSRuntime.InvokeAsync<bool>("readUploadedFileAsText", "fileUpload");
+	private static Action<string, string> _action;
+	private string message = "";
+	protected override void OnInitialized() {
+		_action = import;
+	}
 
-        [JSInvokable]
-    public static void ImportJSResponse(string _data, string type)
-        => _action.Invoke(_data, type);
+	private async void Download(string path, string name) {
+		var response = await Utils.GetAsync((await getURLTask) + path);
+		if (response.IsSuccessStatusCode) {
+			var buffer = Encoding.UTF8.GetBytes(await response.Content.ReadAsStringAsync());
+			JSRuntime.InvokeAsync<object>(
+			"saveAsFile",
+				name,
+			   Convert.ToBase64String(buffer));
+		}
+	}
 
-    private async void import(string _data, string type)
-    {
-        var response = await Utils.PostAsync($"{await getURLTask}api/Inventory/Import{type}", _data);
-        message = response.IsSuccessStatusCode ? "Imported" : "Import failed";
-        StateHasChanged();
-    } 
+	private async void UploadFile(string type)
+		=> await JSRuntime.InvokeAsync<bool>("readUploadedFileAsText", "fileUpload");
+
+	[JSInvokable]
+	public static void ImportJSResponse(string _data, string type)
+	=> _action.Invoke(_data, type);
+
+	private async void import(string _data, string type) {
+		var response = await Utils.PostAsync($"{await getURLTask}api/Inventory/Import{type}", _data);
+		message = response.IsSuccessStatusCode ? "Imported" : "Import failed";
+		StateHasChanged();
+	}
 }

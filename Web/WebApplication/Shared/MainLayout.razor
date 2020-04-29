@@ -1,25 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
 <AuthorizeView>
-    <Authorized>
-        <div class="sidebar">
-            <NavMenu/>
-        </div>
-    </Authorized>
+	<Authorized>
+		<div class="sidebar">
+			<NavMenu />
+		</div>
+	</Authorized>
 </AuthorizeView>
 
 <div class="main">
-    <div class="top-row px-4">
-        <AuthorizeView>
-            <Authorized>
-                <a href="\Login" class="ml-md-auto">Logout</a>
-            </Authorized>
-            <NotAuthorized>
-                <a href="\Login" class="ml-md-auto">Login</a>
-            </NotAuthorized>
-        </AuthorizeView>
-    </div>
-    <div class="content px-4">
-        @Body
-    </div>
+	<div class="top-row px-4">
+		<AuthorizeView>
+			<Authorized>
+				<a href="\Login" class="ml-md-auto">Logout</a>
+			</Authorized>
+			<NotAuthorized>
+				<a href="\Login" class="ml-md-auto">Login</a>
+			</NotAuthorized>
+		</AuthorizeView>
+	</div>
+	<div class="content px-4">
+		@Body
+	</div>
 </div>

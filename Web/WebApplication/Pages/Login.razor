@@ -7,61 +7,57 @@
 @attribute [AllowAnonymous]
 
 <AuthorizeView>
-    <NotAuthorized>
-        <h1>Log in</h1>
-            <input type="text" @bind-value="@userId" /> 
-            <button class="btn btn-primary" @onclick="login">Login</button>
-            <p>@message</p>
-    </NotAuthorized>
-    <Authorized>
-       <h1>Log out</h1>
-         <button class="btn btn-primary" @onclick="logout">Logout</button>
-    </Authorized>
+	<NotAuthorized>
+		<h1>Log in</h1>
+		<input type="text" @bind-value="@userId" />
+		<button class="btn btn-primary" @onclick="login">Login</button>
+		<p>@message</p>
+	</NotAuthorized>
+	<Authorized>
+		<h1>Log out</h1>
+		<button class="btn btn-primary" @onclick="logout">Logout</button>
+	</Authorized>
 </AuthorizeView>
 
 @code {
-    [Parameter]
-    public string ReturnUrl { get; set; }
-    
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
-    
-    private string userId { get; set; }
-    private string message { get; set; }
-    
-    private async void login()
-    {
-        var response = await Utils.PostAsync($"{await getURLTask}api/User", userId);
-        
-        if (response.IsSuccessStatusCode)
-        {
-            Utils.UserId = JsonConvert.DeserializeObject<Business.Models.User>(await response.Content.ReadAsStringAsync()).UserId;
-            message = "";
-            userId = "";
-            AuthStateProvider.IsAuthenticated = true;
-            AuthStateProvider.NotifyAuthenticationStateChanged();
-            NavigationManager.NavigateTo(ReturnUrl ?? "\\");
-        }
-        else
-        {
-            message = "Login failed";
-            Utils.UserId = Guid.Empty;
-            AuthStateProvider.IsAuthenticated = false;
-            AuthStateProvider.NotifyAuthenticationStateChanged();
-            StateHasChanged();
-        }
-        
-    }
+	[Parameter]
+	public string ReturnUrl { get; set; }
 
-    private void logout()
-    {
-        Utils.UserId = Guid.Empty;
-        userId = "";
-        message = "Logged out";
-        AuthStateProvider.IsAuthenticated = false;
-        
-        AuthStateProvider.NotifyAuthenticationStateChanged();
-        
-        StateHasChanged();
-    }
+	[CascadingParameter]
+	private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+	private string userId { get; set; }
+	private string message { get; set; }
+
+	private async void login() {
+		var response = await Utils.PostAsync($"{await getURLTask}api/User", userId);
+
+		if (response.IsSuccessStatusCode) {
+			Utils.UserId = JsonConvert.DeserializeObject<Business.Models.User>(await response.Content.ReadAsStringAsync()).UserId;
+			message = "";
+			userId = "";
+			AuthStateProvider.IsAuthenticated = true;
+			AuthStateProvider.NotifyAuthenticationStateChanged();
+			NavigationManager.NavigateTo(ReturnUrl ?? "\\");
+		}
+		else {
+			message = "Login failed";
+			Utils.UserId = Guid.Empty;
+			AuthStateProvider.IsAuthenticated = false;
+			AuthStateProvider.NotifyAuthenticationStateChanged();
+			StateHasChanged();
+		}
+
+	}
+
+	private void logout() {
+		Utils.UserId = Guid.Empty;
+		userId = "";
+		message = "Logged out";
+		AuthStateProvider.IsAuthenticated = false;
+
+		AuthStateProvider.NotifyAuthenticationStateChanged();
+
+		StateHasChanged();
+	}
 }
