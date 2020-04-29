@@ -1,1 +1,0 @@
-{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"One or more validation errors occurred.","status":400,"traceId":"|f84fe21b-4e274486cb21bb88.","errors":{"dateTo":["The value 'date' is not valid."]}}

@@ -50,12 +50,14 @@ namespace API {
 			services.AddSingleton<Repository.IItemRepository<DataLogic.Models.ItemDL, Guid>, DataLogic.List.ItemDL>();
 			services.AddSingleton<Repository.IInventoryRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.InventoryDL>();
 			services.AddSingleton<Repository.IUserRepository<DataLogic.Models.UserDL, Guid>, DataLogic.List.UserDL>();
+			services.AddSingleton<Repository.ICheckoutRepository<DataLogic.Models.InventoryDL, Guid>, DataLogic.List.CheckoutDL>(); //Only needs to be a list
 
 			//Logic
 			services.AddSingleton<Business.Logic.ItemLogic>();
 			services.AddSingleton<Business.Logic.InventoryLogic>();
 			services.AddSingleton<Business.Logic.UserLogic>();
 			services.AddSingleton<Business.Logic.TransacationLogic>();
+			services.AddSingleton<Business.Logic.CheckoutLogic>();
 
 			//Exporters
 			services.AddScoped<Export.JsonExport>();
@@ -100,7 +102,7 @@ namespace API {
 				if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted) {
 
 					ctx.Response.StatusCode = 500;
-					await ctx.Response.WriteAsync("Failure");
+					await ctx.Response.WriteAsync("\"Failure\"");
 				}
 			});
 

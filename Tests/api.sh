@@ -456,7 +456,7 @@ printf "\t\tEMPTY\n"
 if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='Failure'
+    Expected='"Failure"'
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
@@ -471,7 +471,7 @@ printf "\t\tSPACE\n"
 if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/ ) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='Failure'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
@@ -516,27 +516,33 @@ fi;
 
 printf "\tList\n"
 printf "\t\tNo Authentiction\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Items/List -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\tWorking\n"
@@ -594,27 +600,33 @@ fi;
 printf "Inventory\n"
 printf "\tList\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/List -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tWorking\n"
@@ -626,27 +638,33 @@ fi;
 
 printf "\tInsert\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory) != 500 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tItemId\n"
@@ -759,27 +777,33 @@ fi;
 
 printf "\tInsert List\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory/List) != 500 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory/List) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory/List -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Inventory/List -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tItemId\n"
@@ -892,27 +916,33 @@ fi;
 
 printf "\tGet\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tWorking\n"
@@ -924,27 +954,33 @@ fi;
 
 printf "\tStock\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Inventory/Stock -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tWorking\n"
@@ -957,74 +993,91 @@ then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "Transaction\n"
 printf "\tCost\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T)) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T) -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
-dateTo=(date +%FT%T)
 printf "\t\t\tWorking\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?dateFrom=0001-01-01T00:00:00\&dateTo=${dateTo} -H 'ID: '$Authentiction) == 200 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T) -H 'ID: '$Authentiction) == 200 ]]
 then 
     var=$(<results.txt)
-    Expected='0'
+    Expected='20.0'
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\tRevenue\n"
 printf "\t\t\tNo Authentication\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue) != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T)) == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
 		kill -1 $$
     fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tUnauthenticated\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue -H 'ID: '$Authentiction'h') != 500 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T) -H 'ID: '$Authentiction'h') == 500 ]]
 then 
     var=$(<results.txt)
-    Expected='"Unauthorized"'    
+    Expected='"Failure"'    
     if [[ $Expected != "$var" ]]
     then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
 
 printf "\t\t\tWorking\n"
-if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=${dateTo} -H 'ID: '$Authentiction) == 200 ]]
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T) -H 'ID: '$Authentiction) == 200 ]]
 then 
     var=$(<results.txt)
     Expected='4'
@@ -1033,5 +1086,217 @@ then
         printf "Failed \n"
         kill -1 $$
     fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
 fi;
+
+printf "Checkout\n"
+printf "\tCheckout\n"
+printf "\t\t\tItemId\n"
+printf "\t\t\t\tNULL\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","quantity":1,"time":"2020-01-01T00:00:00","export":false,"monies":1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["ItemId Empty"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\t\tEmpty\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"00000000-0000-0000-0000-000000000000","quantity":1,"time":"2020-01-01T00:00:00","export":false,"monies":1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["ItemId Empty"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tQuantity\n"
+printf "\t\t\t\tNegative\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":-1,"time":"2020-01-01T00:00:00","export":false,"monies":1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["Quantity negative"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\t\tZero\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":0,"time":"2020-01-01T00:00:00","export":false,"monies":1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["Quantity zero"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tMonies\n"
+printf "\t\t\t\tNegative\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":1,"time":"2020-01-01T00:00:00","export":false,"monies":-1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["Monies negative"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tAll Broken\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"00000000-0000-0000-0000-000000000000","quantity":0,"time":"2020-01-01T00:00:00","export":false,"monies":-1.0}]') == 400 ]]
+then 
+    var=$(<results.txt)
+    Expected='["ItemId Empty","Quantity zero","Monies negative"]'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tAll Fixed\n"
+if [[ $(curl -s -k -o results.txt -X POST -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction -H 'Content-Type: application/json' -d '[{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":1,"time":"2020-01-01T00:00:00","export":false,"monies":10.0}]') != 200 ]]
+then 
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+
+printf "\tPurchase\n"
+printf "\t\t\tNo Authentication\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout) == 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Failure"'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tUnauthenticated\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction'h') == 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Failure"'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tWorking\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout -H 'ID: '$Authentiction) == 200 ]]
+then 
+    var=$(<results.txt)
+    Expected='[{"inventoryId":"5b078b5a-d987-4424-88ea-57f2cca2866e","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":5,"time":"2020-04-29T22:19:20.7570682+01:00","export":true,"monies":1},{"inventoryId":"5b078b5a-d987-4424-88ea-57f2cca2866e","itemId":"eaa0ec62-7e0d-454c-966a-171cbb17b0a1","quantity":1,"time":"2020-04-29T22:19:20.7570691+01:00","export":true,"monies":2},{"inventoryId":"4da698cc-11a3-4e17-96b1-d3b99c027225","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":5,"time":"2020-04-29T22:19:20.7570699+01:00","export":true,"monies":1},{"inventoryId":"00000000-0000-0000-0000-000000000000","itemId":"0f8fad5b-d9cb-469f-a165-70867728950e","quantity":1,"time":"2020-01-01T00:00:00","export":false,"monies":10.0}]'
+    if [[ 727 != ${#var} ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+printf "\tClear\n"
+printf "\t\t\tNo Authentication\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout/Clear) == 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Failure"'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+		kill -1 $$
+    fi;  
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tUnauthenticated\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout/Clear -H 'ID: '$Authentiction'h') == 500 ]]
+then 
+    var=$(<results.txt)
+    Expected='"Failure"'
+    if [[ $Expected != "$var" ]]
+    then
+        printf "Failed \n"
+        kill -1 $$
+    fi;
+else
+    printf "  http code Fail\n"
+	kill -1 $$
+fi;
+
+printf "\t\t\tWorking\n"
+if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Checkout/Clear -H 'ID: '$Authentiction) != 200 ]]
+then 
+    printf "  http code Fail\n"
+  	kill -1 $$
+fi;
+
 printf "Passed\n"

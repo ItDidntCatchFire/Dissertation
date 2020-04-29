@@ -1,23 +1,26 @@
 ﻿@page "/"
 @using WebApplication.Components
 @inject NavigationManager NavigationManager
+@inject Task<string> getURLTask
 @attribute [Authorize]
 
 <form action="#" @onsubmit="Scan">
 	Guid to Scan
-	<input type="text" name="txt" />
+	<input @bind="CurrentValue" type="text" name="txt" />
 </form>
 
 <button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
-<Cart @ref="child" NFC="false" callBack="callback" />
 
+<Cart @ref="child" NFC="false" callBack="callback" />
 
 @code
 {
 	private List<Cart.Item> items = new List<Cart.Item>();
 
 	private Cart child;
+
+	private string CurrentValue;
 
 	public void callback(List<Cart.Item> _items) {
 		items = _items;
@@ -26,15 +29,31 @@
 
 	protected override void OnInitialized() {
 		//Get the contents of the basket
-		// var timer = new System.Threading.Timer(
-		//     e => Scan(),
-		//     null,
-		//     TimeSpan.Zero,
-		//     TimeSpan.FromMilliseconds(500));
+		var timer = new System.Threading.Timer(
+			e => CheckBasket(),
+			null,
+			TimeSpan.Zero,
+			TimeSpan.FromMilliseconds(500));
+	}
+
+	private async void CheckBasket() {
+		if (items.Count > 0)
+			return;
+
+		var response = await Utils.GetAsync($"{await getURLTask}api/Checkout");
+		if (response.IsSuccessStatusCode) {
+
+			var inventory = JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await response.Content.ReadAsStringAsync());
+
+			foreach (var inven in inventory)
+				child.UpdateMessage(inven.ItemId);
+
+			StateHasChanged();
+		}
 	}
 
 	private void Scan() {
-		child.UpdateMessage(Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"));
+		child.UpdateMessage(Guid.Parse(CurrentValue));
 
 		StateHasChanged();
 	}
@@ -43,6 +62,7 @@
 
 	private async void Checkout() {
 		var inventory = new List<Business.Models.Inventory>();
+
 		foreach (var item in items)
 			inventory.Add(new Business.Models.Inventory() {
 				ItemId = item.ItemId,
@@ -52,11 +72,14 @@
 				Export = true
 			});
 
-		var response = await Utils.PostAsync("api/Inventory/List", items);
-		if (response.IsSuccessStatusCode) {
-			InvId = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
-
+		var checkoutResponse = await Utils.PostAsync($"{await getURLTask}api/Inventory/List", inventory);
+		if (checkoutResponse.IsSuccessStatusCode) {
+			InvId = JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await checkoutResponse.Content.ReadAsStringAsync()).First().InventoryId;
 			items = new List<Cart.Item>();
+
+			//Clear the items in the checkout
+			await Utils.GetAsync($"{await getURLTask}api/Checkout/Clear");
+
 			StateHasChanged();
 			child.Clear();
 		}
