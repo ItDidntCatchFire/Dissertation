@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
+    //[Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
     public class InventoryController : Controller,
         IController<IEnumerable<Business.Models.Inventory>, Guid>,
         IDataTransfer
@@ -29,6 +29,7 @@ namespace API.Controllers
             _import = importResolver;
         }
 
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpGet("{inventoryId}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid inventoryId)
         {
@@ -46,6 +47,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpPost]
         public async Task<IActionResult> InsertAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
@@ -68,6 +70,7 @@ namespace API.Controllers
             }
         }
         
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpGet("List")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -82,6 +85,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpGet("Export")]
         public async Task<IActionResult> SaveFile([FromRoute] eExport exportType)
         {
@@ -105,6 +109,7 @@ namespace API.Controllers
 
         }
 
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpPost("Import")]
         public async Task<IActionResult> ReadFile([FromBody] string content, [FromRoute] eImport importType)
         {
@@ -122,6 +127,7 @@ namespace API.Controllers
             }
         }
         
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpPost("List")]
         public async Task<IActionResult> InsertInventoryListAsync([FromBody] IEnumerable<Business.Models.Inventory> inventories)
         {
@@ -144,6 +150,7 @@ namespace API.Controllers
             }
         }
         
+        [Authorize(Roles = nameof(Business.Models.User.Roles.Owner))]
         [HttpGet("Stock")]
         public async Task<IActionResult> GetStock() {
             try {

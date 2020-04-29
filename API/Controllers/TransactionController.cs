@@ -16,8 +16,8 @@ namespace API.Controllers {
 			_transacationLogic = transacationLogic;
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> GetCost(DateTime dateFrom, DateTime dateTo) {
+		[HttpGet("Cost")]
+		public async Task<IActionResult> GetCost([FromQuery] DateTime dateFrom,[FromQuery] DateTime dateTo) {
 			try {
 				return Ok(await _transacationLogic.CalculateCost(dateFrom, dateTo));
 			}
@@ -27,8 +27,8 @@ namespace API.Controllers {
 			}
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> GetRevenue(DateTime dateFrom, DateTime dateTo) {
+		[HttpGet("Revenue")]
+		public async Task<IActionResult> GetRevenue([FromQuery] DateTime dateFrom,[FromQuery] DateTime dateTo) {
 			try {
 				return Ok(await _transacationLogic.CalculateRevenue(dateFrom, dateTo));
 			}
