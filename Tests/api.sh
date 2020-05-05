@@ -1,7 +1,7 @@
 #!/bin/bash
 Expected=""
 Port=5321
-IP=$(ip addr show eth0 | grep -Po 'inet \K[\d.]+')
+IP=$(ip addr show wlan0 | grep -Po 'inet \K[\d.]+')
 Authentiction="0f8fad5b-d9cb-469f-a165-70867728950e"
 #Port=5001
 #IP="localhost"
@@ -10,7 +10,7 @@ Authentiction="0f8fad5b-d9cb-469f-a165-70867728950e"
 cd ../API
 dotnet run --urls "https://${IP}:${Port}" > /dev/null &
 PROC_ID=$!
-sleep 5
+sleep 20
 
 cd ../Tests
 host=$"https://${IP}:${Port}/api/"
