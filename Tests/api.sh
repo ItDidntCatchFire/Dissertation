@@ -1037,7 +1037,7 @@ if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Cost?date
 then 
     var=$(<results.txt)
     Expected='20.0'
-    if [[ $Expected != "$var" ]]
+    if [[ "$var" != *"$Expected"* ]]
     then
         printf "Failed \n"
         kill -1 $$
