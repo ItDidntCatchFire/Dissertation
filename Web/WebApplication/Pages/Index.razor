@@ -7,12 +7,10 @@
 <div>
 	Guid to Scan
 	<input @bind="CurrentValue" type="text" name="txt" />
-	<button class="btn btn-primary"  @onclick="Scan"> </button>
-	
-	
+	<button class="btn btn-primary"  @onclick="Scan">Buy</button>
 </div>
 
-<button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
+<button class="btn btn-primary" disabled="@(!(items != null && items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
 
 <Cart @ref="child" NFC="false" callBack="callback" />
@@ -40,16 +38,16 @@
 	}
 
 	private async void CheckBasket() {
-		if (items.Count > 0)
+		if (items?.Count > 0)
 			return;
 
 		var response = await Utils.GetAsync($"{await getURLTask}api/Checkout");
 		if (response.IsSuccessStatusCode) {
 
 			var inventory = JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await response.Content.ReadAsStringAsync());
-
-			foreach (var inven in inventory)
-				child.UpdateMessage(inven.ItemId);
+			if (inventory != null)
+				foreach (var inven in inventory)
+					child.UpdateMessage(inven.ItemId);
 
 			StateHasChanged();
 		}
@@ -57,8 +55,6 @@
 
 	private void Scan() {
 		child.UpdateMessage(Guid.Parse(CurrentValue));
-
-		StateHasChanged();
 	}
 
 	private Guid InvId;
