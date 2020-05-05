@@ -47,7 +47,7 @@
 			<button class="btn btn-primary" @onclick="Update">Update</button>
 		}
 		else {
-			<button class="btn btn-primary" @onclick="Add">Add</button>
+			<button class="btn btn-primary" @onclick="@Add">Add</button>
 		}
 
 		<button class="btn btn-primary" @onclick="ClearIndex">Clear</button>
@@ -101,10 +101,11 @@ else {
 
 	private async Task Add() {
 		message = "";
-		var response = await Utils.PostAsync("api/Items", item);
+		var response = await Utils.PostAsync("${await getURLTask}api/Items", item);
 
-		var json = await response.Content.ReadAsStringAsync();
+		string json = "";
 		if (response.IsSuccessStatusCode) {
+			json = await response.Content.ReadAsStringAsync();
 			item = JsonConvert.DeserializeObject<Business.Models.Item>(json);
 			items.Add(item);
 		}
