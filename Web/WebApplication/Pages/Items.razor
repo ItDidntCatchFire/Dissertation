@@ -101,7 +101,7 @@ else {
 
 	private async Task Add() {
 		message = "";
-		var response = await Utils.PostAsync("${await getURLTask}api/Items", item);
+		var response = await Utils.PostAsync($"{await getURLTask}api/Items", item);
 
 		string json = "";
 		if (response.IsSuccessStatusCode) {
