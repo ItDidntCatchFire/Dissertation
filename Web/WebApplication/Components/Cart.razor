@@ -52,8 +52,7 @@ else {
 		//The checkout card has been scanned
 		if (Guid.Parse("11111111-1111-1111-1111-111111111111") == id) {
 			var purchase = new List<Business.Models.Inventory>();
-
-
+			
 			foreach (var item in Items) {
 				purchase.Add(new Business.Models.Inventory() {
 					ItemId = item.ItemId,
@@ -64,14 +63,15 @@ else {
 
 			var response = await Utils.PostAsync($"{await getURLTask}api/Checkout", purchase);
 
-			Items = new List<Item>();
+			if (response.IsSuccessStatusCode)
+				Items = new List<Item>();
 
 		}
 		else { //They are scanning an item
 			var response = await Utils.GetAsync($"{await getURLTask}api/Items/{id}");
 			if (response.IsSuccessStatusCode) {
 				var _item = JsonConvert.DeserializeObject<Business.Models.Item>(await response.Content.ReadAsStringAsync());
-
+				
 				Items ??= new List<Item>();
 
 				//If we already have the item just increase the quantity otherwise add a new item
@@ -92,8 +92,6 @@ else {
 				}
 			}
 		}
-
-
 
 		StateHasChanged();
 

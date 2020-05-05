@@ -1,5 +1,4 @@
 ﻿@page "/Items"
-@using Business.Models
 @inject IJSRuntime JSRuntime;
 @inject Task<string> getURLTask
 @attribute [Authorize]
@@ -96,14 +95,14 @@ else {
 	protected override async Task OnInitializedAsync() {
 		_action = () => { message = "Written"; };
 		var response = await Utils.GetAsync($"{await getURLTask}api/Items/List");
-		items = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<List<Business.Models.Item>>(await response.Content.ReadAsStringAsync()) : new List<Item>();
+		items = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<List<Business.Models.Item>>(await response.Content.ReadAsStringAsync()) : new List<Business.Models.Item>();
 	}
 
 	private async Task Add() {
 		message = "";
 		var response = await Utils.PostAsync($"{await getURLTask}api/Items", item);
 
-		string json = "";
+		var json = "";
 		if (response.IsSuccessStatusCode) {
 			json = await response.Content.ReadAsStringAsync();
 			item = JsonConvert.DeserializeObject<Business.Models.Item>(json);
@@ -111,6 +110,8 @@ else {
 		}
 		else
 			message = json;
+		
+		StateHasChanged();
 	}
 
 	private async Task Update() {

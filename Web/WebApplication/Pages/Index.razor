@@ -4,10 +4,13 @@
 @inject Task<string> getURLTask
 @attribute [Authorize]
 
-<form action="#" @onsubmit="Scan">
+<div>
 	Guid to Scan
 	<input @bind="CurrentValue" type="text" name="txt" />
-</form>
+	<button class="btn btn-primary"  @onclick="Scan"> </button>
+	
+	
+</div>
 
 <button class="btn btn-primary" disabled="@(!(items.Count > 0))" @onclick="Checkout">Checkout</button>
 @InvId
