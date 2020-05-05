@@ -1,4 +1,5 @@
 ﻿@page "/Items"
+@using Business.Models
 @inject IJSRuntime JSRuntime;
 @inject Task<string> getURLTask
 @attribute [Authorize]
@@ -95,8 +96,7 @@ else {
 	protected override async Task OnInitializedAsync() {
 		_action = () => { message = "Written"; };
 		var response = await Utils.GetAsync($"{await getURLTask}api/Items/List");
-		if (response.IsSuccessStatusCode)
-			items = JsonConvert.DeserializeObject<List<Business.Models.Item>>(await response.Content.ReadAsStringAsync());
+		items = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<List<Business.Models.Item>>(await response.Content.ReadAsStringAsync()) : new List<Item>();
 	}
 
 	private async Task Add() {

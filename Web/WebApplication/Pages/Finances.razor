@@ -2,13 +2,9 @@
 @inject Task<string> getURLTask
 @attribute [Authorize]
 
-@if (inventories == null) {
-	<p>
-		<em>Loading...</em>
-	</p>
-}
-else {
-	<div class="container my-4" style="overflow:hidden; display:flex; flex-direction:row">
+<h1>Finances</h1>
+
+<div class="container my-4" style="overflow:hidden; display:flex; flex-direction:row">
 		<div style="flex-grow:1">
 			<p>Overall</p>
 			<p>Total Cost: @totalCost</p>
@@ -30,7 +26,13 @@ else {
 			<p>Total Revenue: @totalYearRevenue</p>
 		</div>
 	</div>
-	
+
+@if (inventories == null) {
+	<p>
+		<em>Loading...</em>
+	</p>
+}
+else {
 	<div class="container my-4">
 		<!--Accordion wrapper-->
 		<div class="accordion md-accordion accordion-blocks" id="accordionEx24" role="tablist" aria-multiselectable="true">
@@ -166,10 +168,7 @@ else {
 		if (totalYearCostResponse.IsSuccessStatusCode)
 			totalYearCost = JsonConvert.DeserializeObject<decimal>(await totalYearCostResponse.Content.ReadAsStringAsync());
 
-
-
-		if (itemResponse.IsSuccessStatusCode)
-			items = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());
+		items = itemResponse.IsSuccessStatusCode ? JsonConvert.DeserializeObject<IEnumerable<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync()) : new List<Business.Models.Item>();
 
 		if (inventoryResponse.IsSuccessStatusCode) {
 			inventories = JsonConvert.DeserializeObject<IEnumerable<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync());
@@ -178,6 +177,10 @@ else {
 				into newGroup
 					orderby newGroup.Key
 					select newGroup;
+		}
+		else
+		{
+			inventories = new List<Business.Models.Inventory>();
 		}
 	}
 }

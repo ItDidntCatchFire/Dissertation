@@ -3,13 +3,14 @@
 @inject Task<string> getURLTask
 @attribute [Authorize]
 
+<h1>Stock</h1>
+
 @if (inventory == null) {
 	<p>
 		<em>Loading...</em>
 	</p>
 }
 else {
-	<h1>Stock</h1>
 	<div class="container my-4">
 		<table class="table">
 			<thead>
@@ -41,10 +42,8 @@ else {
 		var inventoryResponse = await Utils.GetAsync($"{await getURLTask}api/Inventory/Stock");
 		var itemResponse = await Utils.GetAsync($"{await getURLTask}api/Items/List");
 
-		if (inventoryResponse.IsSuccessStatusCode)
-			inventory = JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync());
-
-		if (itemResponse.IsSuccessStatusCode)
-			items = JsonConvert.DeserializeObject<List<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync());
+		inventory = inventoryResponse.IsSuccessStatusCode ? JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await inventoryResponse.Content.ReadAsStringAsync()) : new List<Business.Models.Inventory>();
+		
+		items = itemResponse.IsSuccessStatusCode ? JsonConvert.DeserializeObject<List<Business.Models.Item>>(await itemResponse.Content.ReadAsStringAsync()) : new List<Business.Models.Item>();
 	}
 }
