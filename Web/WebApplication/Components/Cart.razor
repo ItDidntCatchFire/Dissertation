@@ -11,7 +11,14 @@ else if (NFC && Items == null) {
 		<em>Please Scan Something</em>
 	</p>
 }
-else {
+else if (Items == null)
+{
+	<p>
+		<em>Please upload basket to the checkout</em>
+	</p>
+}
+else
+{
 	<p>Total Price @Items.Sum(x => x.Quantity * x.SellPrice)</p>
 	<div class="list-group overflow-auto" style="height: 60vh">
 		@foreach (var item in Items) {
