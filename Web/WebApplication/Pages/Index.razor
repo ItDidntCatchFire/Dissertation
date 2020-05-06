@@ -47,7 +47,9 @@
 			var inventory = JsonConvert.DeserializeObject<List<Business.Models.Inventory>>(await response.Content.ReadAsStringAsync());
 			if (inventory != null)
 				foreach (var inven in inventory)
-					child.UpdateMessage(inven.ItemId);
+					for (var i = 0; i < inven.Quantity; i++)
+						child.UpdateMessage(inven.ItemId);
+					
 
 			StateHasChanged();
 		}
