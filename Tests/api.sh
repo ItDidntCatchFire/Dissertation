@@ -1082,7 +1082,7 @@ printf "\t\t\tWorking\n"
 if [[ $(curl -s -k -o results.txt -w '%{http_code}' ${host}Transaction/Revenue?dateFrom=0001-01-01T00:00:00\&dateTo=$(date +%FT%T) -H 'ID: '$Authentiction) == 200 ]]
 then 
     var=$(<results.txt)
-    Expected='4'
+    Expected='12'
     if [[ "$var" != *"$Expected"* ]]
     then
         printf "Failed \n"

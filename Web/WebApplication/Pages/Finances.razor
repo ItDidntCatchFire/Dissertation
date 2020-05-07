@@ -46,7 +46,7 @@ else {
 						<a data-toggle="collapse" data-parent="#accordionEx24" href="#collapse@(nameGroup.Key)" aria-expanded="true" aria-controls="collapse@(nameGroup.Key)">
 							<h5 class="mt-1 mb-0">
 								<span>@nameGroup.Key</span>
-								<span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => x.Monies).ToString("0.00")</span>
+								<span style="float:right">£@inventories.Where(x => x.InventoryId == nameGroup.Key).Sum(x => (x.Monies * x.Quantity)).ToString("0.00")</span>
 								<i class="fas fa-angle-down rotate-icon"></i>
 							</h5>
 						</a>
