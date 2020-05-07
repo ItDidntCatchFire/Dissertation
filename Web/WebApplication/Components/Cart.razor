@@ -74,16 +74,17 @@ else
 				Items = new List<Item>();
 		}
 		else { //They are scanning an item
-			var response = await Utils.GetAsync($"{await getURLTask}api/Items/{id}");
-			if (response.IsSuccessStatusCode) {
-				var _item = JsonConvert.DeserializeObject<Business.Models.Item>(await response.Content.ReadAsStringAsync());
-				
-				Items ??= new List<Item>();
+			Items ??= new List<Item>();
 
-				//If we already have the item just increase the quantity otherwise add a new item
-				if (Items.FirstOrDefault(x => x.ItemId == id) != null)
-					Items.First(x => x.ItemId == id).Quantity++;
-				else {
+			//If we already have the item just increase the quantity otherwise add a new item
+			if (Items.FirstOrDefault(x => x.ItemId == id) != null)
+				Items.First(x => x.ItemId == id).Quantity++;
+			else {
+				var response = await Utils.GetAsync($"{await getURLTask}api/Items/{id}");
+				if (response.IsSuccessStatusCode)
+				{
+					var _item = JsonConvert.DeserializeObject<Business.Models.Item>(await response.Content.ReadAsStringAsync());
+					
 					var item = new Item {
 						ItemId = _item.ItemId,
 						Name = _item.Name,
@@ -93,7 +94,6 @@ else
 						ShelfLife = _item.ShelfLife,
 						Quantity = 1
 					};
-
 					Items.Add(item);
 				}
 			}

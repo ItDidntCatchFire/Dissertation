@@ -6,7 +6,7 @@ window.NFCScan = async () => {
         await reader.scan();
 
         reader.addEventListener("error", () => {
-           false;
+           return false;
         });
         
         reader.addEventListener("reading", ({ message, serialNumber }) => {
