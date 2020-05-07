@@ -16,16 +16,16 @@ namespace Business.Logic {
 			var inventoryDLs = await _checkoutRepository.ListAsync();
 
 			var retVal = new List<Models.Inventory>();
-
-			foreach (var inventoryDL in inventoryDLs)
-				retVal.Add(new Models.Inventory() {
-					InventoryId = inventoryDL.InventoryId,
-					ItemId = inventoryDL.ItemId,
-					Time = inventoryDL.Time,
-					Export = inventoryDL.Export,
-					Quantity = inventoryDL.Quantity,
-					Monies = inventoryDL.Monies
-				});
+			if (inventoryDLs != null)
+				foreach (var inventoryDL in inventoryDLs)
+					retVal.Add(new Models.Inventory() {
+						InventoryId = inventoryDL.InventoryId,
+						ItemId = inventoryDL.ItemId,
+						Time = inventoryDL.Time,
+						Export = inventoryDL.Export,
+						Quantity = inventoryDL.Quantity,
+						Monies = inventoryDL.Monies
+					});
 
 			return retVal;
 		}

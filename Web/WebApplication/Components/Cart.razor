@@ -72,7 +72,6 @@ else
 
 			if (response.IsSuccessStatusCode)
 				Items = new List<Item>();
-
 		}
 		else { //They are scanning an item
 			var response = await Utils.GetAsync($"{await getURLTask}api/Items/{id}");
